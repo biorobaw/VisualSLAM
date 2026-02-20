@@ -2,14 +2,13 @@ import operator
 
 import numpy as np
 
-from reinforcement_lib.reinforcement_utils.model_functions import *
-from fairis_tools.experiment_tools.image_processing.image_feature_lib import *
-from fairis_lib.simulation_lib.environment import Maze
+from experiment_tools.image_processing.image_feature_lib import *
+from simulation_tools.simulation_lib.environment import Maze
 from controller import Supervisor
 from matplotlib import patches
 import math
-from fairis_lib.robot_lib.robot_tools import *
-from fairis_tools.experiment_tools.image_processing.feature_extractor import FeatureExtractor
+from simulation_tools.robot_lib.robot_tools import *
+from experiment_tools.image_processing.feature_extractor import FeatureExtractor
 class HamBot(Supervisor):
 
     # Initiilize an instance of Webots Harrison's RosBot
