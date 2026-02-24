@@ -206,5 +206,14 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# macOS
+.DS_Store
+
+# Local datasets (too large for git)
+datasets/
+**/datasets/
+
+# Generated experiment outputs
+SEQ_SLAM/pyseqslam/results/
 
  .idea/
