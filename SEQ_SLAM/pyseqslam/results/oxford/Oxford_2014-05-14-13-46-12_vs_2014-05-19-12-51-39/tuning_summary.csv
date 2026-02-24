@@ -1,0 +1,2 @@
+ds,vmin,vmax,Rwindow,threshold,match_runtime_sec,rank_score,score_valid,score_corr,score_mae,valid_count,invalid_count,valid_ratio,mae,norm_mae,corr,nan_quality_count
+30,0.8,1.2,10,1.0,121.7522,0.4701441551659634,0.6085510688836104,0.27420844342652306,0.5774186453181966,1281,824,0.6085510688836104,892.4918210879688,0.4225813546818034,0.27420844342652306,824

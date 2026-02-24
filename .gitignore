@@ -213,7 +213,4 @@ __marimo__/
 datasets/
 **/datasets/
 
-# Generated experiment outputs
-SEQ_SLAM/pyseqslam/results/
-
  .idea/
