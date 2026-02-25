@@ -7,32 +7,32 @@ Use this file as the master tracker for decisions, runs, and results.
 
 Mark each run as verified before running experiments.
 
-- [ ] 2014-05-06-12-54-54__clouds_sun
-- [ ] 2014-05-06-13-09-52__clouds_sun
-- [ ] 2014-05-06-13-14-58__clouds_poor_gps_sun
-- [ ] 2014-05-14-13-46-12__sun
-- [ ] 2014-05-14-13-50-20__sun
-- [ ] 2014-05-19-12-51-39__poor_gps_sun
-- [ ] 2014-06-23-15-14-44__sun
-- [ ] 2014-06-23-15-36-04__sun
-- [ ] 2014-06-23-15-41-25__sun
-- [ ] 2014-06-26-08-53-56__overcast
-- [ ] 2014-06-26-09-24-58__overcast
+- [x] 2014-05-06-12-54-54__clouds_sun
+- [x] 2014-05-06-13-09-52__clouds_sun
+- [x] 2014-05-06-13-14-58__clouds_poor_gps_sun
+- [x] 2014-05-14-13-46-12__sun
+- [x] 2014-05-14-13-50-20__sun
+- [x] 2014-05-19-12-51-39__poor_gps_sun
+- [x] 2014-06-23-15-14-44__sun
+- [x] 2014-06-23-15-36-04__sun
+- [x] 2014-06-23-15-41-25__sun
+- [x] 2014-06-26-08-53-56__overcast
+- [x] 2014-06-26-09-24-58__overcast
 
 Verification checks per run:
-- [ ] `mono_left` exists
-- [ ] image count recorded
-- [ ] obvious extraction/path issues resolved
+- [x] `mono_left` exists
+- [x] image count recorded
+- [x] obvious extraction/path issues resolved
 
 ---
 
 ## 1) Experiment-Wide Setup (Do Once)
 
 ### 1.1 Decide global defaults
-- [ ] Finalize baseline reference candidate (`2014-05-14-13-46-12__sun` recommended)
-- [ ] Confirm initial parameter grid (`ds`, `vmin/vmax`, `Rwindow`, threshold)
-- [ ] Define length-balancing policy (`--auto-query-stride` by default)
-- [ ] Define quality ranking metric (valid ratio + diagonal correlation + normalized MAE)
+- [x] Finalize baseline reference candidate (`2014-05-14-13-46-12__sun` recommended)
+- [x] Confirm initial parameter grid (`ds`, `vmin/vmax`, `Rwindow`, threshold)
+- [x] Define length-balancing policy (`--auto-query-stride` by default)
+- [x] Define quality ranking metric (valid ratio + diagonal correlation + normalized MAE)
 
 ### 1.2 Reproducibility settings
 - [ ] Keep one command template for all runs
@@ -55,13 +55,13 @@ Verification checks per run:
 Goal: quickly establish stable parameters and a baseline performance profile.
 
 ### 2.1 Choose the reference run
-- [ ] Confirm final reference run (recommended: `2014-05-14-13-46-12__sun`)
-- [ ] Justify why chosen (clean condition, good route coverage, not too short)
+- [x] Confirm final reference run (recommended: `2014-05-14-13-46-12__sun`)
+- [x] Justify why chosen (clean condition, good route coverage, not too short)
 
 ### 2.2 Run fixed-reference comparisons
 For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 
-- [ ] ref vs `2014-05-06-12-54-54__clouds_sun`
+- [x] ref vs `2014-05-06-12-54-54__clouds_sun`
 - [ ] ref vs `2014-05-06-13-09-52__clouds_sun`
 - [ ] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
 - [ ] ref vs `2014-05-14-13-50-20__sun`
@@ -180,3 +180,22 @@ Use one block per experiment:
 - [ ] List blockers and next experiments
 
 This keeps your final paper/report preparation fast and transparent.
+
+---
+
+## 7) Run Log Entries
+
+### Run 001
+
+- Date/time: 2026-02-25
+- Reference run: `2014-05-14-13-46-12__sun`
+- Query run: `2014-05-06-12-54-54__clouds_sun`
+- Query stride: 2 (auto)
+- Command used: `/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py --reference-run 2014-05-14-13-46-12__sun --query-run 2014-05-06-12-54-54__clouds_sun --auto-query-stride`
+- Best params (`ds`, `vmin`, `vmax`, `Rwindow`, threshold): `10`, `0.80`, `1.20`, `10`, `1.00`
+- Valid count / ratio: `1219 / 1937` (`62.93%`)
+- Corr: `0.2534`
+- MAE / normalized MAE: `872.97` / `0.4133`
+- Runtime: DD build/load + preprocessing `43.28s` (matcher sweep completed)
+- Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-12-54-54__clouds_sun/`
+- Notes (failure mode, route overlap issues, observations): first run required no-cache fallback due legacy `.mat` cache layout; one runtime warning in matcher (`invalid value encountered in scalar divide`) but run completed and produced ranked results.
