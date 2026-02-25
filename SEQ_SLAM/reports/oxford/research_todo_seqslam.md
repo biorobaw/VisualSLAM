@@ -63,7 +63,7 @@ For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 
 - [x] ref vs `2014-05-06-12-54-54__clouds_sun`
 - [x] ref vs `2014-05-06-13-09-52__clouds_sun`
-- [ ] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
+- [x] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
 - [ ] ref vs `2014-05-14-13-50-20__sun`
 - [ ] ref vs `2014-05-19-12-51-39__poor_gps_sun`
 - [ ] ref vs `2014-06-23-15-14-44__sun`
@@ -214,3 +214,18 @@ This keeps your final paper/report preparation fast and transparent.
 - Runtime: DD build/load + preprocessing `43.19s` (matcher sweep completed)
 - Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-09-52__clouds_sun/`
 - Notes (failure mode, route overlap issues, observations): legacy cache fallback was triggered again; one runtime warning in matcher (`invalid value encountered in scalar divide`) appeared but full ranked outputs were generated.
+
+### Experiment: Sun Reference vs Clouds/Poor-GPS Query (2014-05-06-13-14-58)
+
+- Date/time: 2026-02-25
+- Reference run: `2014-05-14-13-46-12__sun`
+- Query run: `2014-05-06-13-14-58__clouds_poor_gps_sun`
+- Query stride: 1 (auto)
+- Command used: `/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py --reference-run 2014-05-14-13-46-12__sun --query-run 2014-05-06-13-14-58__clouds_poor_gps_sun --auto-query-stride`
+- Best params (`ds`, `vmin`, `vmax`, `Rwindow`, threshold): `20`, `0.30`, `2.00`, `10`, `1.00`
+- Valid count / ratio: `1262 / 2048` (`61.62%`)
+- Corr: `0.2368`
+- MAE / normalized MAE: `861.89` / `0.4081`
+- Runtime: DD build/load + preprocessing `46.65s` (matcher sweep completed)
+- Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-14-58__clouds_poor_gps_sun/`
+- Notes (failure mode, route overlap issues, observations): legacy cache fallback appeared again; one matcher runtime warning (`invalid value encountered in scalar divide`) was printed, but all ranked outputs and artifacts were generated successfully.
