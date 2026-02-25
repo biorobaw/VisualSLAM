@@ -47,6 +47,40 @@ Observations:
 - Automatic cache load attempted old `.mat` layout and fell back to recomputation.
 - Matcher printed one runtime warning (`invalid value encountered in scalar divide`) but returned full ranked results.
 
+## Experiment — Sun Reference vs Clouds/Sun Query (2014-05-06-13-09-52)
+
+- Date: 2026-02-25
+- Pair: `2014-05-14-13-46-12__sun` vs `2014-05-06-13-09-52__clouds_sun`
+- Query stride: 2 (auto)
+
+Command:
+
+```bash
+/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py \
+  --reference-run 2014-05-14-13-46-12__sun \
+  --query-run 2014-05-06-13-09-52__clouds_sun \
+  --auto-query-stride
+```
+
+Best result:
+
+- `ds=20`, `vmin=0.80`, `vmax=1.20`, `Rwindow=10`, `threshold=1.00`
+- Valid matches: `1197/1907` (`62.77%`)
+- Corr: `0.2455`
+- MAE: `904.58` frames
+- Normalized MAE: `0.4283`
+- DD build/load time: `43.19s`
+
+Artifacts:
+
+- `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-09-52__clouds_sun/tuning_summary.csv`
+- `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-09-52__clouds_sun/oxford_tuning_best_matchings.png`
+
+Observations:
+
+- Automatic cache load again attempted old `.mat` layout and fell back to recomputation.
+- Matcher printed one runtime warning (`invalid value encountered in scalar divide`) but returned complete ranked results.
+
 ## Next Pair
 
-- `2014-05-14-13-46-12__sun` vs `2014-05-06-13-09-52__clouds_sun`
+- `2014-05-14-13-46-12__sun` vs `2014-05-06-13-14-58__clouds_poor_gps_sun`

@@ -62,7 +62,7 @@ Goal: quickly establish stable parameters and a baseline performance profile.
 For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 
 - [x] ref vs `2014-05-06-12-54-54__clouds_sun`
-- [ ] ref vs `2014-05-06-13-09-52__clouds_sun`
+- [x] ref vs `2014-05-06-13-09-52__clouds_sun`
 - [ ] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
 - [ ] ref vs `2014-05-14-13-50-20__sun`
 - [ ] ref vs `2014-05-19-12-51-39__poor_gps_sun`
@@ -199,3 +199,18 @@ This keeps your final paper/report preparation fast and transparent.
 - Runtime: DD build/load + preprocessing `43.28s` (matcher sweep completed)
 - Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-12-54-54__clouds_sun/`
 - Notes (failure mode, route overlap issues, observations): first run required no-cache fallback due legacy `.mat` cache layout; one runtime warning in matcher (`invalid value encountered in scalar divide`) but run completed and produced ranked results.
+
+### Experiment: Sun Reference vs Clouds/Sun Query (2014-05-06-13-09-52)
+
+- Date/time: 2026-02-25
+- Reference run: `2014-05-14-13-46-12__sun`
+- Query run: `2014-05-06-13-09-52__clouds_sun`
+- Query stride: 2 (auto)
+- Command used: `/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py --reference-run 2014-05-14-13-46-12__sun --query-run 2014-05-06-13-09-52__clouds_sun --auto-query-stride`
+- Best params (`ds`, `vmin`, `vmax`, `Rwindow`, threshold): `20`, `0.80`, `1.20`, `10`, `1.00`
+- Valid count / ratio: `1197 / 1907` (`62.77%`)
+- Corr: `0.2455`
+- MAE / normalized MAE: `904.58` / `0.4283`
+- Runtime: DD build/load + preprocessing `43.19s` (matcher sweep completed)
+- Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-09-52__clouds_sun/`
+- Notes (failure mode, route overlap issues, observations): legacy cache fallback was triggered again; one runtime warning in matcher (`invalid value encountered in scalar divide`) appeared but full ranked outputs were generated.
