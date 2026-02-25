@@ -58,6 +58,7 @@ pyseqslam/results/
 
 - [Nordland Report](nordland/report.md)
 - [Oxford 2014-05-14-13-50-20 Report](oxford/Oxford_2014-05-14-13-50-20/report.md)
+- [Oxford SeqSLAM Research To-Do](oxford/research_todo_seqslam.md)
 
 ## Adding New Experiments
 
