@@ -1,5 +1,14 @@
 # Oxford SeqSLAM Research To-Do (11 Available Runs)
 
+## Fairness Reset Notice (2026-02-26)
+
+Matcher bugs were fixed in `pyseqslam/seqslam.py` after initial experiments.
+Pre-fix outputs in this file are retained as **exploratory history** and are not valid for final comparison against post-fix runs.
+
+- [x] Fairness reset protocol written (`reports/oxford/fairness_reset_protocol.md`)
+- [x] Post-fix validated table started (`reports/oxford/postfix_validated_summary.csv`)
+- [ ] Re-run all required Oxford Phase-1 rows under frozen post-fix protocol
+
 This checklist is for documenting the full Oxford SeqSLAM study in three phases.
 Use this file as the master tracker for decisions, runs, and results.
 

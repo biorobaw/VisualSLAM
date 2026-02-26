@@ -257,6 +257,9 @@ class SeqSLAM():
     def getMatches(self, DD):
         # TODO parallelize
         matches = np.nan*np.ones((DD.shape[1],2))    
+        DD_extended = np.vstack((DD, np.inf * np.ones((1, DD.shape[1]))))
+        y_max = DD_extended.shape[0]
+        flatDD = DD_extended.flatten(order='F')
         # parfor?
         half_ds = int(self.params.matching.ds / 2)
         for N in range(half_ds, DD.shape[1] - half_ds):
@@ -281,15 +284,10 @@ class SeqSLAM():
             x= np.tile(np.arange(n_start , n_start+self.params.matching.ds+1), (len(v), 1))    
             
             #TODO idx_add and x now equivalent to MATLAB, dh 1 indexing
-            score = np.zeros(DD.shape[0])    
-            
-            # add a line of inf costs so that we penalize running out of data
-            DD = np.vstack((DD, np.inf * np.ones((1, DD.shape[1]))))
-                    
-            y_max = DD.shape[0]        
+            score = np.inf * np.ones(DD.shape[0])
+
             xx = (x-1) * y_max
-            
-            flatDD = DD.flatten()
+
             for s in range(1, DD.shape[0]):   
                 y = np.copy(idx_add+s)
                 y[y>y_max]=y_max     
@@ -310,8 +308,10 @@ class SeqSLAM():
             )
             not_window = list(set(range(len(score))).symmetric_difference(set(window))) #xor
             min_value_2nd = np.min(score[not_window])
-            
-            match = [min_idx + half_ds, min_value / min_value_2nd]
+
+            eps = np.finfo(float).eps
+            quality = (min_value + eps) / (min_value_2nd + eps)
+            match = [min_idx + half_ds, quality]
             matches[N,:] = match
                 
         return matches

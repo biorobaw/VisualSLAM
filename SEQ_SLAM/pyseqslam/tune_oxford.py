@@ -118,6 +118,59 @@ def _evaluate_matches(matches, n_ref, n_query, threshold):
     }
 
 
+def _evaluate_core_consistency(matches, n_ref, n_query, ds, threshold=None, min_match_index=1):
+    match_idx = np.asarray(matches[:, 0], dtype=float).copy()
+    quality = np.asarray(matches[:, 1], dtype=float)
+
+    half_ds = int(max(0, ds // 2))
+    core_start = half_ds
+    core_end = max(core_start, n_query - half_ds)
+
+    core_mask = np.zeros(n_query, dtype=bool)
+    if core_end > core_start:
+        core_mask[core_start:core_end] = True
+
+    finite = np.isfinite(match_idx) & np.isfinite(quality)
+    plausible_index = match_idx >= min_match_index
+    valid = finite & plausible_index
+    if threshold is not None:
+        valid = valid & (quality <= float(threshold))
+
+    core_valid = core_mask & valid
+    core_total = int(np.sum(core_mask))
+    core_valid_count = int(np.sum(core_valid))
+    core_valid_ratio = core_valid_count / float(core_total) if core_total > 0 else 0.0
+
+    x = np.arange(n_query, dtype=float)
+    expected = x * (max(1, n_ref - 1) / float(max(1, n_query - 1)))
+
+    if core_valid_count > 0:
+        abs_err = np.abs(match_idx[core_valid] - expected[core_valid])
+        core_mae = float(np.mean(abs_err))
+        core_norm_mae = core_mae / float(max(1, n_ref - 1))
+    else:
+        core_mae = float("inf")
+        core_norm_mae = float("inf")
+
+    if core_valid_count >= 3:
+        core_corr = float(np.corrcoef(x[core_valid], match_idx[core_valid])[0, 1])
+        if np.isnan(core_corr):
+            core_corr = 0.0
+    else:
+        core_corr = 0.0
+
+    return {
+        "core_frame_start": core_start,
+        "core_frame_end_exclusive": core_end,
+        "core_total_count": core_total,
+        "core_valid_count": core_valid_count,
+        "core_valid_ratio": core_valid_ratio,
+        "core_mae": core_mae,
+        "core_norm_mae": core_norm_mae,
+        "core_corr": core_corr,
+    }
+
+
 def _plot_matches(matches, threshold, save_path, title):
     m, _, valid_mask, invalid_mask = _split_match_indices(matches, threshold=threshold)
     x = np.arange(len(m))
@@ -304,6 +357,13 @@ def _run_tuning(args):
 
                 for threshold in threshold_values:
                     metrics = _evaluate_matches(matches, n_ref, n_query, threshold)
+                    core_metrics = _evaluate_core_consistency(
+                        matches,
+                        n_ref,
+                        n_query,
+                        ds=even_ds,
+                        threshold=(threshold if args.core_use_threshold else None),
+                    )
                     composite, corr_pos, mae_score = _compute_composite_score(
                         metrics["valid_ratio"],
                         metrics["corr"],
@@ -323,6 +383,7 @@ def _run_tuning(args):
                             "score_corr": corr_pos,
                             "score_mae": mae_score,
                             **metrics,
+                            **core_metrics,
                         }
                     )
 
@@ -362,6 +423,14 @@ def _run_tuning(args):
                 "norm_mae",
                 "corr",
                 "nan_quality_count",
+                "core_frame_start",
+                "core_frame_end_exclusive",
+                "core_total_count",
+                "core_valid_count",
+                "core_valid_ratio",
+                "core_mae",
+                "core_norm_mae",
+                "core_corr",
             ],
         )
         writer.writeheader()
@@ -402,6 +471,11 @@ def _run_tuning(args):
         f"invalid={best['invalid_count']}/{n_query}"
     )
     print(
+        f"  core_valid={best['core_valid_count']}/{best['core_total_count']} "
+        f"({100.0 * best['core_valid_ratio']:.2f}%), "
+        f"core_window=[{best['core_frame_start']},{best['core_frame_end_exclusive']})"
+    )
+    print(
         f"  rank_score={best['rank_score']:.4f} "
         f"(weights: valid={rank_weights['valid']}, corr={rank_weights['corr']}, mae={rank_weights['mae']})"
     )
@@ -409,6 +483,11 @@ def _run_tuning(args):
         print(
             f"  mae={best['mae']:.2f} frames, "
             f"normalized_mae={best['norm_mae']:.4f}, corr={best['corr']:.4f}"
+        )
+    if np.isfinite(best["core_norm_mae"]):
+        print(
+            f"  core_mae={best['core_mae']:.2f} frames, "
+            f"core_normalized_mae={best['core_norm_mae']:.4f}, core_corr={best['core_corr']:.4f}"
         )
 
 
@@ -429,6 +508,11 @@ def main():
     parser.add_argument("--weight-valid", type=float, default=0.45)
     parser.add_argument("--weight-corr", type=float, default=0.40)
     parser.add_argument("--weight-mae", type=float, default=0.15)
+    parser.add_argument(
+        "--core-use-threshold",
+        action="store_true",
+        help="Apply threshold filtering to core consistency metrics (off by default).",
+    )
     parser.add_argument("--no-cache", action="store_true", help="Force recomputing preprocessing/DD")
 
     args = parser.parse_args()

@@ -1,0 +1,3 @@
+reference_run,query_run,dataset_group,protocol,best_ds,best_vmin,best_vmax,best_rwindow,best_threshold,valid_ratio,core_valid_ratio,corr,core_corr,norm_mae,core_norm_mae,rank_score,status
+2014-05-14-13-50-20__sun,2014-05-14-13-50-20__sun,oxford,self_check_postfix,10,0.8,1.2,10,0.8,0.9647887323943662,1.0,0.9999994333091309,0.9999994333091309,2.5792473756157954e-05,2.5792473756157954e-05,0.9841508340300538,validated
+2014-05-14-13-46-12__sun,2014-05-19-12-51-39__poor_gps_sun,oxford,targeted_retune_postfix_auto_stride,50,0.8,1.2,30,0.9,0.7919239904988123,1.0,0.999721297016073,0.9528789568476362,0.05245930484660064,0.06556781982630554,0.8983854188039048,validated
