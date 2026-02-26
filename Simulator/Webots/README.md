@@ -5,6 +5,33 @@ FAIRIS provides a template and libraries that stream lines the development of ro
 will still need to create new controllers. Below are the steps you will need to follow inorder to create a new Robot 
 Controller.
 
+## World Launch Fix (macOS)
+
+If imported worlds reference `webots://projects/...` assets and render as unknown nodes,
+your local Webots install may not include those project assets on disk.
+
+In this repository, the `city` and `village` worlds were normalized to use direct
+Cyberbotics raw URLs (`https://raw.githubusercontent.com/.../R2025a/projects/...`),
+so they no longer depend on local `webots://` path resolution.
+
+Use the launcher script to enforce the correct macOS path:
+
+```bash
+./scripts/open_world.sh worlds/city/city.wbt
+./scripts/open_world.sh worlds/city/city_night.wbt
+./scripts/open_world.sh worlds/village/village.wbt
+./scripts/open_world.sh worlds/village/village_winter.wbt
+```
+
+The launcher script can still enforce a sane `WEBOTS_HOME` on macOS:
+
+```bash
+WEBOTS_HOME=/Applications/Webots.app/Contents
+```
+
+which is required on macOS app bundles.  
+If your IDE sets `WEBOTS_HOME` to `/Applications/Webots.app`, remove that override.
+
 ### Requirements
 This guide assumes that you have already preformed the [FAIRIS Setup](../../README.md) instructions.
 
@@ -59,4 +86,3 @@ robot.move_to_start()
    click ```OK``` button
 
 ![img.png](../docs/figs/contrselection.png)
-
