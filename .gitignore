@@ -212,5 +212,8 @@ __marimo__/
 # Local datasets (too large for git)
 datasets/
 **/datasets/
+!SEQ_SLAM/datasets/
+!SEQ_SLAM/datasets/city_sim/
+!SEQ_SLAM/datasets/city_sim/**
 
  .idea/
