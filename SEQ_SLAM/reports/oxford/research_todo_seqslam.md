@@ -64,7 +64,7 @@ For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 - [x] ref vs `2014-05-06-12-54-54__clouds_sun`
 - [x] ref vs `2014-05-06-13-09-52__clouds_sun`
 - [x] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
-- [ ] ref vs `2014-05-14-13-50-20__sun`
+- [x] ref vs `2014-05-14-13-50-20__sun`
 - [ ] ref vs `2014-05-19-12-51-39__poor_gps_sun`
 - [ ] ref vs `2014-06-23-15-14-44__sun`
 - [ ] ref vs `2014-06-23-15-36-04__sun`
@@ -228,4 +228,19 @@ This keeps your final paper/report preparation fast and transparent.
 - MAE / normalized MAE: `861.89` / `0.4081`
 - Runtime: DD build/load + preprocessing `46.65s` (matcher sweep completed)
 - Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-06-13-14-58__clouds_poor_gps_sun/`
+- Notes (failure mode, route overlap issues, observations): legacy cache fallback appeared again; one matcher runtime warning (`invalid value encountered in scalar divide`) was printed, but all ranked outputs and artifacts were generated successfully.
+
+### Experiment: Sun Reference vs Sun Query (2014-05-14-13-50-20)
+
+- Date/time: 2026-02-25
+- Reference run: `2014-05-14-13-46-12__sun`
+- Query run: `2014-05-14-13-50-20__sun`
+- Query stride: 1 (auto)
+- Command used: `/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py --reference-run 2014-05-14-13-46-12__sun --query-run 2014-05-14-13-50-20__sun --auto-query-stride`
+- Best params (`ds`, `vmin`, `vmax`, `Rwindow`, threshold): `10`, `0.80`, `1.20`, `10`, `1.00`
+- Valid count / ratio: `245 / 284` (`86.27%`)
+- Corr: `0.0284`
+- MAE / normalized MAE: `717.82` / `0.3399`
+- Runtime: DD build/load + preprocessing `23.27s` (matcher sweep completed)
+- Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-14-13-50-20__sun/`
 - Notes (failure mode, route overlap issues, observations): legacy cache fallback appeared again; one matcher runtime warning (`invalid value encountered in scalar divide`) was printed, but all ranked outputs and artifacts were generated successfully.
