@@ -21,6 +21,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/traffic/protos/CautionPanel.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/traffic/protos/SpeedLimitSign.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/traffic/protos/SpeedLimitPanel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/bmw/BmwX5.proto"
 
 WorldInfo {
   info [
@@ -190,6 +191,8 @@ Viewpoint {
   orientation -0.48147666609700873 -0.07998427058682309 0.8728016592919629 3.0518820424592046
   position 946.3394661547526 -587.6822832600428 1050.027539938736
   near 10
+  follow "village_vehicle"
+  followSmoothness 0
 }
 TexturedBackground {
   texture "dusk"
@@ -5718,4 +5721,26 @@ SpeedLimitSign {
   translation 203.23282 -197.83268 0
   rotation 0 0 1 0.523599
   name "speed limit(11)"
+}
+BmwX5 {
+  translation 503.433 -582.999 0.4
+  rotation 0 0 1 2.58
+  name "village_vehicle"
+  controller "village_loop_driver"
+  supervisor TRUE
+  sensorsSlotTop [
+    Camera {
+      name "camera"
+      translation 0.72 0 -0.05
+      fieldOfView 1
+      width 128
+    }
+    Camera {
+      name "side_camera"
+      translation 0.72 0 -0.05
+      rotation 0 0 1 1.5708
+      fieldOfView 1
+      width 128
+    }
+  ]
 }

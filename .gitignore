@@ -209,6 +209,9 @@ __marimo__/
 # macOS
 .DS_Store
 
+# Webots local UI state files
+*.wbproj
+
 # Local datasets (too large for git)
 datasets/
 **/datasets/

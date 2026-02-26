@@ -32,6 +32,32 @@ WEBOTS_HOME=/Applications/Webots.app/Contents
 which is required on macOS app bundles.  
 If your IDE sets `WEBOTS_HOME` to `/Applications/Webots.app`, remove that override.
 
+## City Dataset Collection (SeqSLAM-style)
+
+To collect a route dataset from the `city` / `city_night` worlds using teleport poses:
+
+1. Open `Simulator/Webots/worlds/city/city.wbt` (or `city_night.wbt`).
+2. Select the `BmwX5` node and set controller to `city_dataset_collector`.
+3. Optionally set `controllerArgs`, for example:
+
+```text
+--run-name city_day_outer_loop
+--spacing-m 3.0
+--laps 2
+--camera-mode both
+--overwrite
+```
+
+Generated files:
+
+```text
+SEQ_SLAM/datasets/oxford/<run-name>/
+  mono_left/   # side camera stream (SeqSLAM-compatible default)
+  mono_front/
+  mono_side/
+  poses.csv
+```
+
 ### Requirements
 This guide assumes that you have already preformed the [FAIRIS Setup](../../README.md) instructions.
 
