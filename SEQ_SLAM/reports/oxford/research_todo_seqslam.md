@@ -65,7 +65,7 @@ For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 - [x] ref vs `2014-05-06-13-09-52__clouds_sun`
 - [x] ref vs `2014-05-06-13-14-58__clouds_poor_gps_sun`
 - [x] ref vs `2014-05-14-13-50-20__sun`
-- [ ] ref vs `2014-05-19-12-51-39__poor_gps_sun`
+- [x] ref vs `2014-05-19-12-51-39__poor_gps_sun`
 - [ ] ref vs `2014-06-23-15-14-44__sun`
 - [ ] ref vs `2014-06-23-15-36-04__sun`
 - [ ] ref vs `2014-06-23-15-41-25__sun`
@@ -243,4 +243,19 @@ This keeps your final paper/report preparation fast and transparent.
 - MAE / normalized MAE: `717.82` / `0.3399`
 - Runtime: DD build/load + preprocessing `23.27s` (matcher sweep completed)
 - Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-14-13-50-20__sun/`
+- Notes (failure mode, route overlap issues, observations): legacy cache fallback appeared again; one matcher runtime warning (`invalid value encountered in scalar divide`) was printed, but all ranked outputs and artifacts were generated successfully.
+
+### Experiment: Sun Reference vs Poor-GPS/Sun Query (2014-05-19-12-51-39)
+
+- Date/time: 2026-02-25
+- Reference run: `2014-05-14-13-46-12__sun`
+- Query run: `2014-05-19-12-51-39__poor_gps_sun`
+- Query stride: 3 (auto)
+- Command used: `/Users/asadbeknematov/Desktop/Projects/VisualSLAM/.venv/bin/python -u tune_oxford.py --reference-run 2014-05-14-13-46-12__sun --query-run 2014-05-19-12-51-39__poor_gps_sun --auto-query-stride`
+- Best params (`ds`, `vmin`, `vmax`, `Rwindow`, threshold): `30`, `0.80`, `1.20`, `10`, `1.00`
+- Valid count / ratio: `1281 / 2105` (`60.86%`)
+- Corr: `0.2742`
+- MAE / normalized MAE: `892.49` / `0.4226`
+- Runtime: DD build/load + preprocessing `50.58s` (matcher sweep completed)
+- Output folder: `pyseqslam/results/oxford/Oxford_2014-05-14-13-46-12__sun_vs_2014-05-19-12-51-39__poor_gps_sun/`
 - Notes (failure mode, route overlap issues, observations): legacy cache fallback appeared again; one matcher runtime warning (`invalid value encountered in scalar divide`) was printed, but all ranked outputs and artifacts were generated successfully.
