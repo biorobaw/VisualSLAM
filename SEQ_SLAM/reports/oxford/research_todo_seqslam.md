@@ -7,7 +7,7 @@ Pre-fix outputs in this file are retained as **exploratory history** and are not
 
 - [x] Fairness reset protocol written (`reports/oxford/fairness_reset_protocol.md`)
 - [x] Post-fix validated table started (`reports/oxford/postfix_validated_summary.csv`)
-- [ ] Re-run all required Oxford Phase-1 rows under frozen post-fix protocol
+- [x] Re-run all required Oxford Phase-1 rows under frozen post-fix protocol
 
 This checklist is for documenting the full Oxford SeqSLAM study in three phases.
 Use this file as the master tracker for decisions, runs, and results.
@@ -77,19 +77,19 @@ For 11 total runs, fixed-reference gives 10 comparisons (excluding self-match).
 - [x] ref vs `2014-05-19-12-51-39__poor_gps_sun`
 - [x] ref vs `2014-06-23-15-14-44__sun`
 - [x] ref vs `2014-06-23-15-36-04__sun`
-- [ ] ref vs `2014-06-23-15-41-25__sun`
-- [ ] ref vs `2014-06-26-08-53-56__overcast`
-- [ ] ref vs `2014-06-26-09-24-58__overcast`
+- [x] ref vs `2014-06-23-15-41-25__sun`
+- [x] ref vs `2014-06-26-08-53-56__overcast`
+- [x] ref vs `2014-06-26-09-24-58__overcast`
 
 ### 2.3 Phase 1 quality gate
-- [ ] All 10 runs finished without path/runtime errors
-- [ ] Each run has `tuning_summary.csv`
-- [ ] Each run has best-match plot
-- [ ] Build one Phase 1 summary table (all 10 rows)
+- [x] All 10 runs finished without path/runtime errors
+- [x] Each run has `tuning_summary.csv`
+- [x] Each run has best-match plot
+- [x] Build one Phase 1 summary table (all 10 rows)
 - [ ] Identify provisional global parameter set from top performers
 
 Deliverables:
-- [ ] `Phase1_summary.csv` (combined)
+- [x] `Phase1_summary.csv` (combined)
 - [ ] short write-up: what worked, what failed, what to carry forward
 
 ---

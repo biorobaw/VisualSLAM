@@ -1,0 +1,2 @@
+ds,vmin,vmax,Rwindow,threshold,match_runtime_sec,rank_score,score_valid,score_corr,score_mae,valid_count,invalid_count,valid_ratio,mae,norm_mae,corr,nan_quality_count,core_frame_start,core_frame_end_exclusive,core_total_count,core_valid_count,core_valid_ratio,core_mae,core_norm_mae,core_corr
+10,0.8,1.2,10,0.8,0.7384,0.9841508340300538,0.9647887323943662,0.9999994333091309,0.9999742075262439,274,10,0.9647887323943662,0.0072992700729927005,2.5792473756157954e-05,0.9999994333091309,10,5,279,274,274,1.0,0.0072992700729927005,2.5792473756157954e-05,0.9999994333091309
