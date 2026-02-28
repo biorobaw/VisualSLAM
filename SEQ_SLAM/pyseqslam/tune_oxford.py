@@ -171,7 +171,7 @@ def _evaluate_core_consistency(matches, n_ref, n_query, ds, threshold=None, min_
     }
 
 
-def _plot_matches(matches, threshold, save_path, title):
+def _plot_matches(matches, threshold, save_path, title, n_ref=None):
     m, _, valid_mask, invalid_mask = _split_match_indices(matches, threshold=threshold)
     x = np.arange(len(m))
 
@@ -194,7 +194,15 @@ def _plot_matches(matches, threshold, save_path, title):
             label="Invalid/filtered matches",
         )
 
-    plt.plot([0, len(m)], [0, len(m)], "r--", alpha=0.3, label="Perfect diagonal")
+    n_query = len(m)
+    if n_ref is None:
+        expected_end = float(max(0, n_query - 1))
+        expected_label = "Expected diagonal"
+    else:
+        expected_end = float(max(0, n_ref - 1))
+        expected_label = "Expected length-scaled line"
+
+    plt.plot([0, max(0, n_query - 1)], [0, expected_end], "r--", alpha=0.3, label=expected_label)
     plt.ylim(bottom=invalid_y * 1.5)
     plt.xlabel("Second sequence frame")
     plt.ylabel("Matched first sequence frame")
@@ -453,6 +461,7 @@ def _run_tuning(args):
             f"Rwindow={best['Rwindow']}, thresh={best['threshold']:.2f}, "
             f"valid={best['valid_count']}/{n_query})"
         ),
+        n_ref=n_ref,
     )
 
     print("\n" + "=" * 72)

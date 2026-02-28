@@ -1,0 +1,11 @@
+reference_run,query_run,rank_score,valid_ratio,core_corr,norm_mae,status,reason,strict_gate
+2014-05-14-13-46-12__sun,2014-05-06-12-54-54__clouds_sun,0.7839991537336394,0.9741868869385648,0.5760848302870546,0.23212585002357725,weak,core_corr_below_threshold|norm_mae_above_threshold,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-05-06-13-09-52__clouds_sun,0.8256784452944708,0.6769795490298899,0.6363762794763618,0.1865997136585887,weak,core_corr_below_threshold|norm_mae_above_threshold|valid_ratio_below_threshold,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-05-06-13-14-58__clouds_poor_gps_sun,0.8286467415020574,0.71728515625,0.6381716473874995,0.22614842106187089,weak,core_corr_below_threshold|norm_mae_above_threshold|valid_ratio_below_threshold,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-05-14-13-50-20__sun,0.7810661269298043,0.6936619718309859,-0.5622973067725656,0.530097860046538,weak,core_corr_below_threshold|norm_mae_above_threshold|valid_ratio_below_threshold,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-05-19-12-51-39__poor_gps_sun,0.9606275736605957,0.9762470308788599,0.9528789568476362,0.06556781982630554,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-06-23-15-14-44__sun,0.8828668734988925,0.9887808526551982,0.7559733555055382,0.09649234932108103,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-06-23-15-36-04__sun,0.9067196641106845,0.9803536345776032,0.810359149125028,0.05722087399498829,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-06-23-15-41-25__sun,0.9373114441137177,0.9796665311102074,0.8832354132630059,0.045551067940520225,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-06-26-08-53-56__overcast,0.9327800059147483,0.9776386404293381,0.8715327102833819,0.03846977594537763,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
+2014-05-14-13-46-12__sun,2014-06-26-09-24-58__overcast,0.9558470761058749,0.9776686020544886,0.926245151042438,0.03067903490413461,trusted,passes_strict_gate,"core_corr>=0.7,norm_mae<=0.12,valid_ratio>=0.8"
