@@ -9,9 +9,13 @@ reports/
 ├── README.md                              # This file
 ├── nordland/
 │   └── report.md                         # Nordland dataset experiments
-└── oxford/
-    └── Oxford_2014-05-14-13-50-20/       # Specific Oxford run
-        └── report.md                      # Experiment report for this run
+├── oxford/
+│   └── Oxford_2014-05-14-13-50-20/       # Specific Oxford run
+│       └── report.md                      # Experiment report for this run
+└── sim_worlds/
+    └── CityVillage_worlds/               # Separate City/Village simulator phase
+        ├── summary.csv
+        └── report.md
 ```
 
 ## Datasets
@@ -34,6 +38,15 @@ reports/
    - Date: May 14, 2014, 13:50:20
    - Frames: 284 images
    - Status: Completed
+
+### City/Village Simulator Worlds (Separate from Oxford)
+- **Type**: Simulator driving datasets (city and village worlds)
+- **Comparisons**:
+    - city day vs city day
+    - city day vs city night
+    - village day vs village day
+    - village day vs village winter
+- **Location**: `reports/sim_worlds/CityVillage_worlds/`
 
 ## Results Location
 
@@ -60,6 +73,7 @@ pyseqslam/results/
 - [Oxford 2014-05-14-13-50-20 Report](oxford/Oxford_2014-05-14-13-50-20/report.md)
 - [Oxford SeqSLAM Research To-Do](oxford/research_todo_seqslam.md)
 - [Oxford Phase 1 Fixed-Reference Report](oxford/Phase1_fixed_reference/report.md)
+- [City/Village Simulator Tuning Report](sim_worlds/CityVillage_worlds/report.md)
 
 ## Adding New Experiments
 
