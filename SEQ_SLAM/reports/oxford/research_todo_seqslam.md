@@ -188,7 +188,7 @@ Use one block per experiment:
 - [ ] Capture parameter changes made that week
 - [ ] List blockers and next experiments
 
-This keeps your final paper/report preparation fast and transparent.
+This keeps final paper/report preparation fast and transparent.
 
 ---
 

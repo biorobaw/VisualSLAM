@@ -2,7 +2,7 @@
 
 This is a separate evaluation phase from Oxford (not Phase 2).
 
-## Requested comparisons
+## Evaluated comparisons
 - city day vs city day
 - city day vs city night
 - village day vs village day

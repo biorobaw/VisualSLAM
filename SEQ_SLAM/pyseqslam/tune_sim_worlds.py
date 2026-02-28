@@ -2,7 +2,7 @@
 Auto-tune SeqSLAM on simulator City/Village world datasets.
 
 This is a separate evaluation phase from Oxford.
-Requested pairs:
+Evaluated pairs:
 1) city day   vs city day
 2) city day   vs city night
 3) village day vs village day
@@ -377,7 +377,7 @@ def _write_outputs(rows, report_dir, command_text):
     with open(report_md, "w") as fp:
         fp.write("# City/Village Simulator Tuning Report\n\n")
         fp.write("This is a separate evaluation phase from Oxford (not Phase 2).\n\n")
-        fp.write("## Requested comparisons\n")
+        fp.write("## Evaluated comparisons\n")
         fp.write("- city day vs city day\n")
         fp.write("- city day vs city night\n")
         fp.write("- village day vs village day\n")

@@ -1,14 +1,12 @@
-# Progress Report to Professor: SeqSLAM Oxford Experiments (2026-02-24)
+# SeqSLAM Oxford Experiments Progress Report (2026-02-24)
 
-Dear Professor,
-
-This report summarizes my recent progress on SeqSLAM experiments using the Oxford RobotCar dataset, including implementation updates, tuning outcomes, and next steps.
+This report summarizes recent SeqSLAM experiments on the Oxford RobotCar dataset, including implementation updates, tuning outcomes, and next steps.
 
 ## 1) Objective
 
-My goal was to improve sequence matching robustness and reporting quality for Oxford-to-Oxford place recognition, especially under more challenging cross-condition comparisons.
+The objective was to improve sequence-matching robustness and reporting quality for Oxford-to-Oxford place recognition, especially for challenging cross-condition comparisons.
 
-I evaluated two Oxford run pairs:
+Two Oxford run pairs were evaluated:
 
 - **Soft pair (easier):** `2014-05-14-13-46-12` vs `2014-05-14-13-50-20`
 - **Hard pair (harder):** `2014-05-14-13-46-12` vs `2014-05-19-12-51-39`
@@ -17,7 +15,7 @@ I evaluated two Oxford run pairs:
 
 ### 2.1 Matching/plot diagnostics improvement
 
-I updated plotting and diagnostics to distinguish valid and invalid matches explicitly.
+Plotting and diagnostics were updated to distinguish valid and invalid matches explicitly.
 
 - Invalid/filtered assignments are now shown separately in plots.
 - Valid and invalid counts are reported directly in outputs.
@@ -26,7 +24,7 @@ This prevents misleading interpretation where invalid matches could appear mixed
 
 ### 2.2 Tuning pipeline upgrade
 
-I added and improved an Oxford tuning workflow in `pyseqslam/tune_oxford.py`:
+The Oxford tuning workflow in `pyseqslam/tune_oxford.py` was extended and improved with:
 
 - Parameter sweeps across `ds`, velocity range, and `Rwindow`
 - Threshold sweeps over match quality
@@ -77,7 +75,7 @@ When the denominator is degenerate/non-finite, quality can become invalid and ma
 
 ## 6) Artifacts Produced
 
-For both pairs, I generated:
+For both pairs, the following artifacts were generated:
 
 - `oxford_difference_matrix.png`
 - `oxford_matchings.png`
@@ -94,7 +92,7 @@ Soft pair artifact folder:
 
 ## 7) Next Steps
 
-I propose the following prioritized follow-up work:
+Prioritized follow-up work:
 
 1. **Stabilize confidence computation** in matching (safe denominator handling + robust confidence margin).
 2. **Add temporal consistency post-filtering** to reduce unstable frame-to-frame jumps.
@@ -108,6 +106,4 @@ I propose the following prioritized follow-up work:
 - Reporting now clearly separates valid vs invalid behavior and soft vs hard pair outcomes.
 - Remaining work is primarily algorithmic robustness in confidence scoring and temporal consistency.
 
-Sincerely,
-
-Asadbek Nematov
+Author: Asadbek Nematov
