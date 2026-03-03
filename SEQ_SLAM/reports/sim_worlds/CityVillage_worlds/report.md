@@ -118,6 +118,24 @@ Per-pair tuning outputs (root): [SEQ_SLAM/pyseqslam/results/sim_worlds](SEQ_SLAM
 | village_sim | village_sim_day_centerline_smooth | village_sim_day_centerline_smooth | True | 0.9960 | 0.9910 | 1.0000 | 0.0000 | ds=10, v=(0.80,1.20), R=10, th=1.00 |
 | village_sim | village_sim_day_centerline_smooth | village_sim_winter_centerline_smooth | True | 0.9611 | 0.9552 | 0.9609 | 0.0210 | ds=50, v=(0.80,1.20), R=10, th=1.00 |
 
+## Best-match graphs
+
+### City: day vs day
+
+![City day vs day best matchings](../../../pyseqslam/results/sim_worlds/city_sim/city_sim_city_sim_day_centerline_vs_city_sim_day_centerline/sim_worlds_tuning_best_matchings.png)
+
+### City: day vs night
+
+![City day vs night best matchings](../../../pyseqslam/results/sim_worlds/city_sim/city_sim_city_sim_day_centerline_vs_city_sim_night_centerline/sim_worlds_tuning_best_matchings.png)
+
+### Village: day vs day
+
+![Village day vs day best matchings](../../../pyseqslam/results/sim_worlds/village_sim/village_sim_village_sim_day_centerline_smooth_vs_village_sim_day_centerline_smooth/sim_worlds_tuning_best_matchings.png)
+
+### Village: day vs winter
+
+![Village day vs winter best matchings](../../../pyseqslam/results/sim_worlds/village_sim/village_sim_village_sim_day_centerline_smooth_vs_village_sim_winter_centerline_smooth/sim_worlds_tuning_best_matchings.png)
+
 ## Artifact index
 
 - SEQ_SLAM/pyseqslam/results/sim_worlds/city_sim/city_sim_city_sim_day_centerline_vs_city_sim_day_centerline/tuning_summary.csv
