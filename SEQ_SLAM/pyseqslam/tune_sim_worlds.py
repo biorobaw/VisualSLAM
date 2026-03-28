@@ -12,6 +12,7 @@ Evaluated pairs:
 import argparse
 import csv
 import os
+import sys
 import time
 from copy import deepcopy
 from dataclasses import dataclass
@@ -39,6 +40,33 @@ class TuningPair:
     dataset_group: str
     reference_run: str
     query_run: str
+
+
+def _load_pairs_from_csv(csv_path):
+    pairs = []
+    with open(csv_path, newline="") as fp:
+        reader = csv.DictReader(fp)
+        required = {"dataset_group", "reference_run", "query_run"}
+        if not required.issubset(set(reader.fieldnames or [])):
+            raise ValueError(
+                f"Pair CSV must include columns: {sorted(required)}; found: {reader.fieldnames}"
+            )
+
+        for row in reader:
+            dataset_group = (row.get("dataset_group") or "").strip()
+            reference_run = (row.get("reference_run") or "").strip()
+            query_run = (row.get("query_run") or "").strip()
+
+            if not dataset_group and not reference_run and not query_run:
+                continue
+            if not dataset_group or not reference_run or not query_run:
+                raise ValueError(f"Invalid pair row with missing values: {row}")
+
+            pairs.append(TuningPair(dataset_group, reference_run, query_run))
+
+    if not pairs:
+        raise ValueError(f"No valid pairs found in CSV: {csv_path}")
+    return pairs
 
 
 def _prepare_params_generic(
@@ -313,7 +341,7 @@ def _run_pair(pair, args):
         "dataset_group": pair.dataset_group,
         "reference_run": pair.reference_run,
         "query_run": pair.query_run,
-        "protocol": "city_village_worlds_auto_stride",
+        "protocol": args.protocol_label,
         "best_ds": int(best["ds"]),
         "best_vmin": float(best["vmin"]),
         "best_vmax": float(best["vmax"]),
@@ -376,12 +404,12 @@ def _write_outputs(rows, report_dir, command_text):
     report_md = report_dir / "report.md"
     with open(report_md, "w") as fp:
         fp.write("# City/Village Simulator Tuning Report\n\n")
-        fp.write("This is a separate evaluation phase from Oxford (not Phase 2).\n\n")
+        fp.write("This is a separate evaluation track from Oxford.\n\n")
+        fp.write(f"Protocol: **{rows[0]['protocol']}**\n\n")
         fp.write("## Evaluated comparisons\n")
-        fp.write("- city day vs city day\n")
-        fp.write("- city day vs city night\n")
-        fp.write("- village day vs village day\n")
-        fp.write("- village day vs village winter\n\n")
+        for r in rows:
+            fp.write(f"- {r['dataset_group']}: {r['reference_run']} vs {r['query_run']}\n")
+        fp.write("\n")
         fp.write("## Command\n")
         fp.write("```bash\n")
         fp.write(command_text + "\n")
@@ -408,6 +436,24 @@ def _write_outputs(rows, report_dir, command_text):
 
 def main():
     parser = argparse.ArgumentParser(description="Auto-tune SeqSLAM on City/Village sim-world pairs")
+    parser.add_argument(
+        "--pairs-csv",
+        default="",
+        help=(
+            "Optional CSV path with columns dataset_group,reference_run,query_run. "
+            "If omitted, the built-in baseline 4 pairs are used."
+        ),
+    )
+    parser.add_argument(
+        "--protocol-label",
+        default="city_village_worlds_auto_stride",
+        help="Protocol label written into summary/report outputs.",
+    )
+    parser.add_argument(
+        "--report-subdir",
+        default="CityVillage_worlds",
+        help="Subdirectory under SEQ_SLAM/reports/sim_worlds for generated summary/report files.",
+    )
     parser.add_argument("--ds-values", default="10,20,30,50")
     parser.add_argument("--rwindow-values", default="10,30,50")
     parser.add_argument("--velocity-ranges", default="0.8-1.2,0.5-1.5,0.3-2.0")
@@ -421,12 +467,15 @@ def main():
     parser.add_argument("--no-cache", action="store_true", default=True)
     args = parser.parse_args()
 
-    pairs = [
-        TuningPair("city_sim", "city_sim_day_centerline", "city_sim_day_centerline"),
-        TuningPair("city_sim", "city_sim_day_centerline", "city_sim_night_centerline"),
-        TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_day_centerline_smooth"),
-        TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_winter_centerline_smooth"),
-    ]
+    if args.pairs_csv:
+        pairs = _load_pairs_from_csv(args.pairs_csv)
+    else:
+        pairs = [
+            TuningPair("city_sim", "city_sim_day_centerline", "city_sim_day_centerline"),
+            TuningPair("city_sim", "city_sim_day_centerline", "city_sim_night_centerline"),
+            TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_day_centerline_smooth"),
+            TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_winter_centerline_smooth"),
+        ]
 
     all_rows = []
     for idx, pair in enumerate(pairs, start=1):
@@ -437,11 +486,9 @@ def main():
         all_rows.append(row)
 
     repo_root = Path(__file__).resolve().parents[2]
-    report_dir = repo_root / "SEQ_SLAM/reports/sim_worlds/CityVillage_worlds"
+    report_dir = repo_root / "SEQ_SLAM/reports/sim_worlds" / args.report_subdir
 
-    cmd = (
-        f"{repo_root}/.venv/bin/python -u tune_sim_worlds.py --auto-query-stride --no-cache"
-    )
+    cmd = f"{repo_root}/.venv/bin/python -u tune_sim_worlds.py {' '.join(sys.argv[1:])}".strip()
     summary_csv, report_md = _write_outputs(all_rows, report_dir, cmd)
 
     print("\n" + "=" * 72)
