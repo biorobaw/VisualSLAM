@@ -278,7 +278,16 @@ def _run_pair(pair, args):
             row["norm_mae"] if np.isfinite(row["norm_mae"]) else 1e9,
         ),
     )
-    best = rows_sorted[0]
+
+    gated_rows = [
+        row
+        for row in rows_sorted
+        if (row["valid_ratio"] >= float(args.min_valid_ratio))
+        and (row["valid_count"] >= int(args.min_valid_count))
+    ]
+
+    best = gated_rows[0] if gated_rows else rows_sorted[0]
+    selected_with_gate = bool(gated_rows)
 
     csv_path = os.path.join(result_dir, "tuning_summary.csv")
     with open(csv_path, "w", newline="") as fp:
@@ -356,6 +365,9 @@ def _run_pair(pair, args):
         "norm_mae": float(best["norm_mae"]),
         "core_norm_mae": float(best["core_norm_mae"]),
         "rank_score": float(best["rank_score"]),
+        "selected_with_gate": selected_with_gate,
+        "min_valid_ratio_gate": float(args.min_valid_ratio),
+        "min_valid_count_gate": int(args.min_valid_count),
         "tuning_pass": tuning_pass,
         "result_dir": f"SEQ_SLAM/pyseqslam/{result_dir}",
         "tuning_summary_csv": f"SEQ_SLAM/pyseqslam/{result_dir}/tuning_summary.csv",
@@ -389,6 +401,9 @@ def _write_outputs(rows, report_dir, command_text):
                 "norm_mae",
                 "core_norm_mae",
                 "rank_score",
+                "selected_with_gate",
+                "min_valid_ratio_gate",
+                "min_valid_count_gate",
                 "tuning_pass",
                 "result_dir",
                 "tuning_summary_csv",
@@ -424,7 +439,8 @@ def _write_outputs(rows, report_dir, command_text):
                 f"{str(r['tuning_pass'])} | {r['rank_score']:.4f} | {r['valid_ratio']:.4f} | "
                 f"{r['corr']:.4f} | {r['norm_mae']:.4f} | "
                 f"ds={r['best_ds']}, v=({r['best_vmin']:.2f},{r['best_vmax']:.2f}), "
-                f"R={r['best_rwindow']}, th={r['best_threshold']:.2f} |\n"
+                f"R={r['best_rwindow']}, th={r['best_threshold']:.2f}, "
+                f"gate={str(r['selected_with_gate'])} |\n"
             )
         fp.write("\n## Artifact index\n")
         for r in rows:
@@ -453,6 +469,18 @@ def main():
         "--report-subdir",
         default="CityVillage_worlds",
         help="Subdirectory under SEQ_SLAM/reports/sim_worlds for generated summary/report files.",
+    )
+    parser.add_argument(
+        "--min-valid-ratio",
+        type=float,
+        default=0.0,
+        help="Minimum valid_ratio required when selecting the best row.",
+    )
+    parser.add_argument(
+        "--min-valid-count",
+        type=int,
+        default=0,
+        help="Minimum valid_count required when selecting the best row.",
     )
     parser.add_argument("--ds-values", default="10,20,30,50")
     parser.add_argument("--rwindow-values", default="10,30,50")
