@@ -1,0 +1,2 @@
+date,sequence_id,model_id,owner,protocol_label,eval_mode,trajectory_format,valid_input,ate_rmse,rpe_trans_rmse,rpe_rot_rmse,num_poses,alignment,sync_tolerance_sec,notes
+,,,,,,,False,,,,,,,
