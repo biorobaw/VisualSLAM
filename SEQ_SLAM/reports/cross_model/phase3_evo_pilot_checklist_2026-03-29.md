@@ -4,16 +4,16 @@ Date: 2026-03-29
 
 ## Pilot target selection
 
-- Sequence ID: TBD
-- Ground truth file: TBD
-- Model for first pilot: TBD
-- Owner: TBD
+- Sequence ID: city_sim_day_centerline
+- Ground truth file: SEQ_SLAM/reports/cross_model/pilot/seq_slam/city_sim_day_centerline/inputs/seqslam_city_day.tum.txt
+- Model for first pilot: SEQ_SLAM
+- Owner: SEQ_SLAM lane (this workspace)
 
 ## Preconditions
 
-- [ ] Canonical trajectory contract signed off
-- [ ] Model handoff template completed
-- [ ] Canonical estimate trajectory exported
+- [ ] Canonical trajectory contract signed off (team)
+- [x] Model handoff template completed
+- [x] Canonical estimate trajectory exported
 - [ ] GT trajectory validated
 - [ ] evo installed in environment
 

@@ -1,0 +1,5 @@
+sequence_id,dataset_source,gt_path,gt_exists,gt_timestamp_monotonic,gt_no_nan_inf,gt_quaternion_normalized,gt_pose_count,gt_status,notes
+city_sim_day_centerline,sim_worlds_city,SEQ_SLAM/datasets/city_sim/city_sim_day_centerline/poses.csv,True,True,True,False,364,ready_for_conversion,"native format frame_id,x,y,yaw_rad; quaternion created during TUM conversion"
+city_sim_night_centerline,sim_worlds_city,SEQ_SLAM/datasets/city_sim/city_sim_night_centerline/poses.csv,True,True,True,False,364,ready_for_conversion,"native format frame_id,x,y,yaw_rad; quaternion created during TUM conversion"
+village_sim_day_centerline_smooth,sim_worlds_village,SEQ_SLAM/datasets/village_sim/village_sim_day_centerline_smooth/poses.csv,True,True,True,False,1116,ready_for_conversion,"native format frame_id,x,y,yaw_rad; quaternion created during TUM conversion"
+village_sim_winter_centerline_smooth,sim_worlds_village,SEQ_SLAM/datasets/village_sim/village_sim_winter_centerline_smooth/poses.csv,True,True,True,False,1116,ready_for_conversion,"native format frame_id,x,y,yaw_rad; quaternion created during TUM conversion"
