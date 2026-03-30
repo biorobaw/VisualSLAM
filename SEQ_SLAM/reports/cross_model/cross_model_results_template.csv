@@ -1,2 +1,2 @@
 date,sequence_id,model_id,owner,protocol_label,eval_mode,trajectory_format,valid_input,ate_rmse,rpe_trans_rmse,rpe_rot_rmse,num_poses,alignment,sync_tolerance_sec,notes
-,,,,,,,False,,,,,,,
+2026-03-29,city_sim_day_centerline,seq_slam,SEQ_SLAM lane,pilot_seqslam_selfcheck_v1,sanity_selfcheck,TUM,True,0.0,0.0,0.0,364,SE3,NA,"GT and estimate are identical files with distinct filenames to validate evo pipeline end-to-end"

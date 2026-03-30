@@ -17,6 +17,12 @@ Date: 2026-03-29
   - SEQ_SLAM/reports/cross_model/scripts/convert_sim_poses_to_tum.py
 - Generated sample canonical trajectory for pilot:
   - SEQ_SLAM/reports/cross_model/pilot/seq_slam/city_sim_day_centerline/inputs/seqslam_city_day.tum.txt
+- Completed evo pilot sanity execution (self-check with distinct GT/EST filenames):
+  - outputs folder: SEQ_SLAM/reports/cross_model/pilot/seq_slam/city_sim_day_centerline/outputs
+  - APE raw rmse: 0.0
+  - APE SE3 rmse: 0.0
+  - RPE trans rmse: 0.0
+  - RPE rot rmse: 0.0
 - Added SeqSLAM model owner handoff:
   - SEQ_SLAM/reports/cross_model/model_owner_handoff_seqslam_2026-03-29.md
 - Added populated phase-1 audit rows for available sim GT sources:
@@ -24,7 +30,7 @@ Date: 2026-03-29
 
 ## Ready now
 
-- SeqSLAM lane is ready for first evo pilot execution once team confirms GT/estimate pairing policy for pilot scoring.
+- SeqSLAM lane completed first evo sanity pilot and is ready for cross-model pilot run with non-identical GT/estimate trajectories.
 
 ## Waiting on team
 

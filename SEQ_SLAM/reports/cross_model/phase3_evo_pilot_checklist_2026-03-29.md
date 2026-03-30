@@ -14,24 +14,24 @@ Date: 2026-03-29
 - [ ] Canonical trajectory contract signed off (team)
 - [x] Model handoff template completed
 - [x] Canonical estimate trajectory exported
-- [ ] GT trajectory validated
-- [ ] evo installed in environment
+- [x] GT trajectory validated
+- [x] evo installed in environment
 
 ## Execution steps
 
-- [ ] Run ATE (raw)
-- [ ] Run ATE (SE3 aligned)
-- [ ] Run RPE translation
-- [ ] Run RPE rotation
-- [ ] Save outputs under `reports/cross_model/pilot/<model>/<sequence>/outputs/`
-- [ ] Add one row to cross_model_results_template.csv
+- [x] Run ATE (raw)
+- [x] Run ATE (SE3 aligned)
+- [x] Run RPE translation
+- [x] Run RPE rotation
+- [x] Save outputs under `reports/cross_model/pilot/<model>/<sequence>/outputs/`
+- [x] Add one row to cross_model_results_template.csv
 
 ## Quality checks
 
-- [ ] Metrics generated with no runtime errors
+- [x] Metrics generated with no runtime errors
 - [ ] Plots generated
 - [ ] Repeat run gives matching metrics within tolerance
-- [ ] Notes captured for any alignment/sync caveats
+- [x] Notes captured for any alignment/sync caveats
 
 ## Done criteria
 
