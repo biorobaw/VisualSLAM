@@ -1,0 +1,2 @@
+sequence_id,dataset_source,gt_path,gt_exists,gt_timestamp_monotonic,gt_no_nan_inf,gt_quaternion_normalized,gt_pose_count,gt_status,notes
+,,,,False,False,False,,pending,
