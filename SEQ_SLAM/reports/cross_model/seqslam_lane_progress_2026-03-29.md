@@ -23,6 +23,12 @@ Date: 2026-03-29
   - APE SE3 rmse: 0.0
   - RPE trans rmse: 0.0
   - RPE rot rmse: 0.0
+- Completed evo non-trivial execution (cross-route check):
+  - GT: city_sim_day_centerline, EST: village_sim_day_centerline_smooth
+  - APE raw rmse: 630.044376
+  - APE SE3 rmse: 80.586008
+  - RPE trans rmse: 0.587499
+  - RPE rot rmse: 4.567549
 - Added SeqSLAM model owner handoff:
   - SEQ_SLAM/reports/cross_model/model_owner_handoff_seqslam_2026-03-29.md
 - Added populated phase-1 audit rows for available sim GT sources:

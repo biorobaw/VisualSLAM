@@ -1,0 +1,11 @@
+APE w.r.t. full transformation (unit-less)
+(with SE(3) Umeyama alignment)
+
+       max	213.197452
+      mean	66.430972
+    median	55.738521
+       min	2.927987
+      rmse	80.586008
+       sse	2363854.132018
+       std	45.618315
+

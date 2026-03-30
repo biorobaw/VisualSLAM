@@ -30,8 +30,12 @@ Date: 2026-03-29
 
 - [x] Metrics generated with no runtime errors
 - [ ] Plots generated
-- [ ] Repeat run gives matching metrics within tolerance
+- [x] Repeat run gives matching metrics within tolerance
 - [x] Notes captured for any alignment/sync caveats
+
+Additional note:
+
+- Non-trivial run completed (city day GT vs village day EST) with non-zero metrics.
 
 ## Done criteria
 

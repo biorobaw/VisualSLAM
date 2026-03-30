@@ -1,0 +1,11 @@
+APE w.r.t. full transformation (unit-less)
+(not aligned)
+
+       max	846.466703
+      mean	624.100098
+    median	590.468784
+       min	532.315588
+      rmse	630.044376
+       sse	144491953.545578
+       std	86.342246
+
