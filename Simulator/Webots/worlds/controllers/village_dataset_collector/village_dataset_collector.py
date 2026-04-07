@@ -1,10 +1,11 @@
 """Collect village image sequences using a road-centered teleport path.
 
 Outputs under:
-  <repo>/SEQ_SLAM/datasets/village_sim/<run_name>/
+  <repo>/<dataset_root>/<run_name>/
     mono_left/
+    mono_right/
     mono_front/
-    mono_side/
+    mono_side/   (legacy alias of mono_left)
     poses.csv
 """
 
@@ -367,14 +368,20 @@ def main():
 
     front_camera = driver.getDevice("camera")
     side_camera = driver.getDevice("side_camera")
+    right_camera = driver.getDevice("right_camera")
     if front_camera is None:
         raise RuntimeError("Front camera device 'camera' not found.")
 
     front_camera.enable(timestep)
     if side_camera is not None:
         side_camera.enable(timestep)
-    if args.side_capture_source == "side_camera" and args.camera_mode in ("both", "side") and side_camera is None:
-        raise RuntimeError("Side camera requested, but device 'side_camera' not found.")
+    if right_camera is not None:
+        right_camera.enable(timestep)
+    if args.side_capture_source == "side_camera" and args.camera_mode in ("both", "side"):
+        if side_camera is None:
+            raise RuntimeError("Left side camera requested, but device 'side_camera' not found.")
+        if right_camera is None:
+            raise RuntimeError("Right side camera requested, but device 'right_camera' not found.")
 
     driver.setSteeringAngle(0.0)
     driver.setCruisingSpeed(0.0)
@@ -392,9 +399,11 @@ def main():
             raise RuntimeError(f"Run directory already exists: {run_dir} (use --overwrite)")
 
     mono_left_dir = run_dir / "mono_left"
+    mono_right_dir = run_dir / "mono_right"
     mono_front_dir = run_dir / "mono_front"
     mono_side_dir = run_dir / "mono_side"
     mono_left_dir.mkdir(parents=True, exist_ok=True)
+    mono_right_dir.mkdir(parents=True, exist_ok=True)
     mono_front_dir.mkdir(parents=True, exist_ok=True)
     mono_side_dir.mkdir(parents=True, exist_ok=True)
 
@@ -456,11 +465,15 @@ def main():
                 if args.side_capture_source == "rotate_car":
                     if not set_pose_and_settle(x, y, yaw + side_yaw_offset, args.side_settle_steps):
                         return
-                    front_camera.saveImage(str(mono_side_dir / filename), 100)
                     front_camera.saveImage(str(mono_left_dir / filename), 100)
+                    front_camera.saveImage(str(mono_side_dir / filename), 100)
+                    if not set_pose_and_settle(x, y, yaw - side_yaw_offset, args.side_settle_steps):
+                        return
+                    front_camera.saveImage(str(mono_right_dir / filename), 100)
                 else:
-                    side_camera.saveImage(str(mono_side_dir / filename), 100)
                     side_camera.saveImage(str(mono_left_dir / filename), 100)
+                    side_camera.saveImage(str(mono_side_dir / filename), 100)
+                    right_camera.saveImage(str(mono_right_dir / filename), 100)
 
             writer.writerow([frame_idx, f"{x:.4f}", f"{y:.4f}", f"{yaw:.6f}"])
             frame_idx += 1

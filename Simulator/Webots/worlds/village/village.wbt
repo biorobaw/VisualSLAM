@@ -5615,14 +5615,24 @@ BmwX5 {
       name "camera"
       translation 0.72 0 -0.05
       fieldOfView 1
-      width 128
+      width 640
+      height 480
     }
     Camera {
       name "side_camera"
       translation 0.72 0 -0.05
       rotation 0 0 1 1.5708
       fieldOfView 1
-      width 128
+      width 640
+      height 480
+    }
+    Camera {
+      name "right_camera"
+      translation 0.72 0 -0.05
+      rotation 0 0 1 -1.5708
+      fieldOfView 1
+      width 640
+      height 480
     }
   ]
 }

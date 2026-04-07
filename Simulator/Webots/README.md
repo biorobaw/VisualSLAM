@@ -41,21 +41,86 @@ To collect a route dataset from the `city` / `city_night` worlds using teleport 
 3. Optionally set `controllerArgs`, for example:
 
 ```text
---run-name city_day_outer_loop
---spacing-m 3.0
---laps 2
+--dataset-root SEQ_SLAM/datasets/city_sim
+--run-name city_sim_day_centerline
+--spacing-m 1.99
+--laps 1
 --camera-mode both
+--side-capture-source rotate_car
 --overwrite
 ```
 
 Generated files:
 
 ```text
-SEQ_SLAM/datasets/oxford/<run-name>/
-  mono_left/   # side camera stream (SeqSLAM-compatible default)
+<dataset-root>/<run-name>/
+  mono_left/   # SeqSLAM primary stream
+  mono_right/
   mono_front/
-  mono_side/
+  mono_side/   # legacy alias of mono_left
   poses.csv
+```
+
+All city/village world cameras are configured at `640x480`.
+Use `--side-capture-source rotate_car` for side views so the front camera is reused after a yaw
+rotation; this avoids the car body visible in direct side-camera captures.
+
+### Exact City Reruns Used By SeqSLAM
+
+Open [city.wbt](worlds/city/city.wbt) and set the `BmwX5` controller to `city_dataset_collector`:
+
+```text
+--dataset-root SEQ_SLAM/datasets/city_sim
+--run-name city_sim_day_centerline
+--spacing-m 1.99
+--laps 1
+--camera-mode both
+--side-capture-source rotate_car
+--overwrite
+```
+
+Open [city_night.wbt](worlds/city/city_night.wbt) and use:
+
+```text
+--dataset-root SEQ_SLAM/datasets/city_sim
+--run-name city_sim_night_centerline
+--spacing-m 1.99
+--laps 1
+--camera-mode both
+--side-capture-source rotate_car
+--overwrite
+```
+
+## Village Dataset Collection (SeqSLAM-style)
+
+To collect the matching village route datasets, open [village.wbt](worlds/village/village.wbt) or
+[village_winter.wbt](worlds/village/village_winter.wbt), select `village_vehicle`, and set the
+controller to `village_dataset_collector`.
+
+Village summer/day run:
+
+```text
+--dataset-root SEQ_SLAM/datasets/village_sim
+--run-name village_sim_day_centerline_smooth
+--spacing-m 1.5
+--yaw-lookahead-m 5.0
+--laps 1
+--camera-mode both
+--side-capture-source rotate_car
+--overwrite
+```
+
+Village winter run:
+
+```text
+--dataset-root SEQ_SLAM/datasets/village_sim
+--run-name village_sim_winter_centerline_smooth
+--spacing-m 1.5
+--yaw-lookahead-m 5.0
+--laps 1
+--camera-mode both
+--side-capture-source rotate_car
+--overwrite
 ```
 
 ### Requirements
