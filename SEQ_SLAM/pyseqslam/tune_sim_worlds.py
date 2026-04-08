@@ -3,10 +3,10 @@ Auto-tune SeqSLAM on simulator City/Village world datasets.
 
 This is a separate evaluation phase from Oxford.
 Evaluated pairs:
-1) city day   vs city day
-2) city day   vs city night
-3) village day vs village day
-4) village day vs village winter
+1) city summer    vs city summer
+2) city summer    vs city night
+3) village summer vs village summer
+4) village summer vs village winter
 """
 
 import argparse
@@ -499,10 +499,10 @@ def main():
         pairs = _load_pairs_from_csv(args.pairs_csv)
     else:
         pairs = [
-            TuningPair("city_sim", "city_sim_day_centerline", "city_sim_day_centerline"),
-            TuningPair("city_sim", "city_sim_day_centerline", "city_sim_night_centerline"),
-            TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_day_centerline_smooth"),
-            TuningPair("village_sim", "village_sim_day_centerline_smooth", "village_sim_winter_centerline_smooth"),
+            TuningPair("city", "city_summer", "city_summer"),
+            TuningPair("city", "city_summer", "city_night"),
+            TuningPair("village", "village_summer", "village_summer"),
+            TuningPair("village", "village_summer", "village_winter"),
         ]
 
     all_rows = []

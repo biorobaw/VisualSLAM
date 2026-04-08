@@ -1,0 +1,15 @@
+APE w.r.t. translation part (m)
+(not aligned)
+(projected to xy plane)
+
+       max	522.068045
+      mean	58.382797
+    median	1.333195
+       min	0.000000
+      rmse	142.494418
+       sse	21644766.715010
+       std	129.985031
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/pilot/seq_slam/village_summer_vs_village_winter/outputs/ape_trans_xy_raw.pdf
+
+Matplotlib is building the font cache; this may take a moment.

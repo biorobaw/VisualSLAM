@@ -1,0 +1,9 @@
+dataset_group,reference_run,query_run
+city,city_summer,city_night
+city,city_night,city_summer
+city,city_night,city_night
+city,city_summer,city_summer
+village,village_summer,village_winter
+village,village_winter,village_summer
+village,village_winter,village_winter
+village,village_summer,village_summer

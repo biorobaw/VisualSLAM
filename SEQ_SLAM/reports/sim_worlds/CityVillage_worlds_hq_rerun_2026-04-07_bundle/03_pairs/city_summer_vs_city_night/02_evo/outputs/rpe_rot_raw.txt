@@ -1,0 +1,13 @@
+RPE w.r.t. rotation angle in degrees (deg)
+for delta = 1 (frames) using consecutive pairs
+(not aligned)
+
+       max	175.781235
+      mean	15.715856
+    median	0.000057
+       min	0.000000
+      rmse	39.944988
+       sse	499423.441674
+       std	36.723479
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/pilot/seq_slam/city_summer_vs_city_night/outputs/rpe_rot_raw.pdf

@@ -1,0 +1,14 @@
+RPE w.r.t. translation part (m)
+for delta = 1 (frames) using consecutive pairs
+(not aligned)
+(projected to xy plane)
+
+       max	30.931043
+      mean	0.055984
+    median	0.000000
+       min	0.000000
+      rmse	1.315917
+       sse	1913.458837
+       std	1.314725
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/pilot/seq_slam/village_summer_vs_village_summer/outputs/rpe_trans_xy_raw.pdf
