@@ -226,3 +226,6 @@ SEQ_SLAM/datasets/*
 SEQ_SLAM/pyseqslam/results/sim_worlds_cache/
 
  .idea/
+
+# ORB_SLAM3 third-party code (built locally via setup_mac.sh)
+ORB_SLAM/ORB_SLAM3/
