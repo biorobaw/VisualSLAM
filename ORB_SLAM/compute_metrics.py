@@ -41,8 +41,8 @@ def run_evo(gt_file, est_file, metric_type="ape", align=True):
     cmd = [evo_bin, "tum", gt_file, est_file, "--sync"]
     
     if metric_type == "ape" and align:
-        cmd.extend(["--align", "umeyama"])
-        
+        cmd.extend(["--align", "--correct_scale"])
+
     try:
         # Run command
         res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
