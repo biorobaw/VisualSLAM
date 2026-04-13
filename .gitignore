@@ -186,7 +186,7 @@ cython_debug/
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
 #  and can be added to the global gitignore or merged into this file. However, if you prefer, 
 #  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
+.vscode/
 
 # Ruff stuff:
 .ruff_cache/
@@ -226,3 +226,6 @@ SEQ_SLAM/datasets/*
 SEQ_SLAM/pyseqslam/results/sim_worlds_cache/
 
  .idea/
+
+# ORB_SLAM3 third-party code (built locally via setup_mac.sh)
+ORB_SLAM/ORB_SLAM3/
