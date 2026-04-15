@@ -229,3 +229,9 @@ SEQ_SLAM/pyseqslam/results/sim_worlds_cache/
 
 # ORB_SLAM3 third-party code (built locally via setup_mac.sh)
 ORB_SLAM/ORB_SLAM3/
+
+# Experiments (too large for git)
+Experiments/
+
+# ORC SDK
+robotcar-dataset-sdk
