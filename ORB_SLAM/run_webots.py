@@ -3,10 +3,12 @@ import os
 import subprocess
 import glob
 import shutil
+import datetime
+import sys
 
 def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
     """
-    Run ORB-SLAM3 on Webots simulator dataset.
+    Run ORB-SLAM3 on Webots simulator dataset, generate a report, and save an evo zip file.
     """
     if not os.path.exists(dataset_dir):
         print(f"Error: Dataset directory {dataset_dir} does not exist.")
@@ -48,6 +50,22 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
     ]
     
     print(f"Executing: {' '.join(cmd)}")
+    
+    # Generate the report text
+    report_file = os.path.splitext(output_tum)[0] + "_report.txt"
+    os.makedirs(os.path.dirname(output_tum), exist_ok=True)
+    with open(report_file, "w") as rf:
+        rf.write("=== ORB-SLAM3 Webots Run Report ===\n")
+        rf.write(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        rf.write(f"Dataset Directory: {dataset_dir}\n")
+        rf.write(f"Settings YAML: {settings_yaml}\n")
+        rf.write(f"ORB Binary: {orb_binary}\n")
+        rf.write(f"Vocab File: {vocab_file}\n")
+        rf.write(f"Python Command: {' '.join(sys.argv)}\n")
+        rf.write(f"Executed Command: {' '.join(cmd)}\n")
+        rf.write("===================================\n")
+    print(f"Generated run report: {report_file}")
+    
     try:
         subprocess.run(cmd, check=True)
         
@@ -55,7 +73,6 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
         found = False
         for g_file in generated_files:
             if os.path.exists(g_file):
-                os.makedirs(os.path.dirname(output_tum), exist_ok=True)
                 shutil.move(g_file, output_tum)
                 print(f"Moved {g_file} to {output_tum}")
                 found = True
@@ -63,6 +80,30 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
                 
         if not found:
             print("Warning: ORB-SLAM3 finished but no trajectory file was found in CWD.")
+            return
+
+        # Attempt to run evo_ape if groundtruth exists
+        gt_file = os.path.join(dataset_dir, "groundtruth.tum")
+        if os.path.exists(gt_file):
+            # Check if output is empty
+            if os.path.getsize(output_tum) == 0:
+                print(f"Warning: The generated trajectory file ({output_tum}) is empty!")
+                print("This means ORB-SLAM3 failed to track any keyframes. Are you using the correct camera settings YAML for this dataset?")
+                return
+                
+            zip_output = os.path.splitext(output_tum)[0] + "_evo.zip"
+            # Use --align and --correct_scale for full Sim3 Umeyama alignment
+            evo_cmd = ["evo_ape", "tum", gt_file, output_tum, "--align", "--correct_scale", "--save_results", zip_output]
+            print(f"Executing evo: {' '.join(evo_cmd)}")
+            try:
+                subprocess.run(evo_cmd, check=True)
+                print(f"Successfully generated evo zip file: {zip_output}")
+            except subprocess.CalledProcessError as e:
+                print(f"Evo execution failed: {e}")
+            except FileNotFoundError:
+                print("Evo executable not found. Make sure you have installed evo (e.g. pip install evo).")
+        else:
+            print(f"Warning: No groundtruth.tum found in {dataset_dir}, skipping evo_ape.")
             
     except subprocess.CalledProcessError as e:
         print(f"ORB-SLAM3 execution failed: {e}")
