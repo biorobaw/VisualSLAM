@@ -1,0 +1,12 @@
+APE w.r.t. full transformation (unit-less)
+(with SE(3) Umeyama alignment)
+
+       max	0.000000
+      mean	0.000000
+    median	0.000000
+       min	0.000000
+      rmse	0.000000
+       sse	0.000000
+       std	0.000000
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/pilot/seq_slam/village_sim_winter_centerline_smooth_vs_village_sim_winter_centerline_smooth/outputs/ape_se3.pdf
