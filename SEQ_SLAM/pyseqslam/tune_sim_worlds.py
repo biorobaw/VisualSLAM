@@ -12,6 +12,7 @@ Evaluated pairs:
 import argparse
 import csv
 import os
+import re
 import sys
 import time
 from copy import deepcopy
@@ -40,6 +41,10 @@ class TuningPair:
     dataset_group: str
     reference_run: str
     query_run: str
+
+
+def _sanitize_tag(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())
 
 
 def _load_pairs_from_csv(csv_path):
@@ -73,6 +78,7 @@ def _prepare_params_generic(
     dataset_group,
     reference_run,
     query_run,
+    camera_subdir="mono_front",
     use_cache=False,
     query_stride=1,
     auto_query_stride=True,
@@ -80,8 +86,8 @@ def _prepare_params_generic(
     params = defaultParameters()
     params.DO_RESIZE = 1
 
-    reference_path = f"../datasets/{dataset_group}/{reference_run}/mono_left"
-    query_path = f"../datasets/{dataset_group}/{query_run}/mono_left"
+    reference_path = f"../datasets/{dataset_group}/{reference_run}/{camera_subdir}"
+    query_path = f"../datasets/{dataset_group}/{query_run}/{camera_subdir}"
 
     ref_images, ref_timestamps = _load_timestamps(reference_path)
     qry_images, qry_timestamps = _load_timestamps(query_path)
@@ -157,14 +163,16 @@ def _run_pair(pair, args):
         pair.dataset_group,
         pair.reference_run,
         pair.query_run,
+        camera_subdir=args.camera_subdir,
         use_cache=not args.no_cache,
         query_stride=args.query_stride,
         auto_query_stride=args.auto_query_stride,
     )
 
+    result_suffix = f"_{_sanitize_tag(args.result_tag)}" if args.result_tag else ""
     result_dir = (
         f"results/sim_worlds/{pair.dataset_group}/"
-        f"{pair.dataset_group}_{pair.reference_run}_vs_{pair.query_run}"
+        f"{pair.dataset_group}_{pair.reference_run}_vs_{pair.query_run}{result_suffix}"
     )
     os.makedirs(result_dir, exist_ok=True)
 
@@ -173,6 +181,7 @@ def _run_pair(pair, args):
     print("=" * 72)
     print(f"Reference path: {reference_path}")
     print(f"Query path:     {query_path}")
+    print(f"Camera path:    {args.camera_subdir}")
     print(f"Reference frames found: {n_ref_images}")
     print(f"Query frames found (raw):  {n_qry_images_raw}")
     print(f"Query frames used (stride={effective_query_stride}): {n_qry_images_used}")
@@ -350,6 +359,7 @@ def _run_pair(pair, args):
         "dataset_group": pair.dataset_group,
         "reference_run": pair.reference_run,
         "query_run": pair.query_run,
+        "camera_subdir": args.camera_subdir,
         "protocol": args.protocol_label,
         "best_ds": int(best["ds"]),
         "best_vmin": float(best["vmin"]),
@@ -386,6 +396,7 @@ def _write_outputs(rows, report_dir, command_text):
                 "dataset_group",
                 "reference_run",
                 "query_run",
+                "camera_subdir",
                 "protocol",
                 "best_ds",
                 "best_vmin",
@@ -423,7 +434,10 @@ def _write_outputs(rows, report_dir, command_text):
         fp.write(f"Protocol: **{rows[0]['protocol']}**\n\n")
         fp.write("## Evaluated comparisons\n")
         for r in rows:
-            fp.write(f"- {r['dataset_group']}: {r['reference_run']} vs {r['query_run']}\n")
+            fp.write(
+                f"- {r['dataset_group']}: {r['reference_run']} vs {r['query_run']} "
+                f"(camera: {r['camera_subdir']})\n"
+            )
         fp.write("\n")
         fp.write("## Command\n")
         fp.write("```bash\n")
@@ -469,6 +483,16 @@ def main():
         "--report-subdir",
         default="CityVillage_worlds",
         help="Subdirectory under SEQ_SLAM/reports/sim_worlds for generated summary/report files.",
+    )
+    parser.add_argument(
+        "--camera-subdir",
+        default="mono_front",
+        help="Camera subdirectory to use from each sim-world run.",
+    )
+    parser.add_argument(
+        "--result-tag",
+        default="",
+        help="Optional suffix appended to each per-pair result directory.",
     )
     parser.add_argument(
         "--min-valid-ratio",

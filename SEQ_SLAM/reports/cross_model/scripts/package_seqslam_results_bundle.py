@@ -20,6 +20,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--evo-report", required=True)
     parser.add_argument("--benchmark-csv", required=True)
     parser.add_argument("--sanity-csv", required=True)
+    parser.add_argument(
+        "--evo-results-root",
+        default="SEQ_SLAM/reports/cross_model/pilot/seq_slam",
+        help="Repo-relative root directory that holds per-pair evo artifacts.",
+    )
     parser.add_argument("--bundle-dir", required=True)
     return parser.parse_args()
 
@@ -114,6 +119,7 @@ def main() -> None:
     evo_report = Path(args.evo_report).resolve()
     benchmark_csv = Path(args.benchmark_csv).resolve()
     sanity_csv = Path(args.sanity_csv).resolve()
+    evo_results_root = (REPO_ROOT / args.evo_results_root).resolve()
     bundle_dir = Path(args.bundle_dir).resolve()
 
     summary_fields, summary_rows = load_rows(summary_csv)
@@ -151,7 +157,7 @@ def main() -> None:
         pair_evo_dir = pair_dir / "02_evo"
 
         seqslam_result_dir = (REPO_ROOT / row["result_dir"]).resolve()
-        evo_result_dir = (REPO_ROOT / "SEQ_SLAM/reports/cross_model/pilot/seq_slam" / pair).resolve()
+        evo_result_dir = (evo_results_root / pair).resolve()
 
         copy_dir(seqslam_result_dir, pair_seqslam_dir)
         copy_dir(evo_result_dir, pair_evo_dir)
