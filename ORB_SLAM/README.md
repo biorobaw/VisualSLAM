@@ -63,7 +63,7 @@ python3 run_webots.py \
 
 ### 3. Metric Evaluation
 
-Calculate the Absolute Trajectory Error (ATE) and Relative Pose Error (RPE) for the generated estimations against the ground truths using `compute_metrics.py`.
+Calculate specific 2D planar metrics for the generated estimations against the ground truths using `compute_metrics.py`.
 
 ```bash
 python3 compute_metrics.py \
@@ -71,7 +71,12 @@ python3 compute_metrics.py \
     --gt_dir data \
     --output_csv results/metrics_summary.csv
 ```
-This loops through all `*_trajectory.tum` files in `--results_dir`, aligns them via Umeyama alignment, runs `evo_ape` and `evo_rpe`, and compiles a final CSV matrix summary.
+This loops through all `*_trajectory.tum` files in `--results_dir` and computes three explicit alignment metrics standardized across the project:
+- **APE Translation** (`evo_ape ... -r trans_part --project_to_plane xy`)
+- **RPE Translation** (`evo_rpe ... -r trans_part --project_to_plane xy`)
+- **RPE Rotation** (`evo_rpe ... -r angle_deg --project_to_plane xy`)
+
+It then compiles these results into a final CSV matrix summary.
 
 *(For Webots, ensure the GT trajectories are placed in the paths expected by the script or are accessible in the `datasets` folder.)*
 

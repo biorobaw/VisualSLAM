@@ -13,7 +13,7 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
     if not os.path.exists(dataset_dir):
         print(f"Error: Dataset directory {dataset_dir} does not exist.")
         return
-        
+
     # Find image directory, usually mono_front or directly in dataset_dir
     img_dir = os.path.join(dataset_dir, "mono_front")
     if not os.path.exists(img_dir):
@@ -82,28 +82,35 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
             print("Warning: ORB-SLAM3 finished but no trajectory file was found in CWD.")
             return
 
-        # Attempt to run evo_ape if groundtruth exists
+        if os.path.getsize(output_tum) == 0:
+            print(f"Warning: The generated trajectory file ({output_tum}) is empty!")
+            print("This means ORB-SLAM3 failed to track any keyframes. Are you using the correct camera settings YAML for this dataset?")
+            return
+
+        # Copy ground truth file if it exists
         gt_file = os.path.join(dataset_dir, "groundtruth.tum")
+        if not os.path.exists(gt_file):
+            gt_file = os.path.join(os.path.dirname(dataset_dir), "groundtruth.tum")
+            
         if os.path.exists(gt_file):
-            # Check if output is empty
-            if os.path.getsize(output_tum) == 0:
-                print(f"Warning: The generated trajectory file ({output_tum}) is empty!")
-                print("This means ORB-SLAM3 failed to track any keyframes. Are you using the correct camera settings YAML for this dataset?")
-                return
+            out_dir = os.path.dirname(output_tum)
+            base_name = os.path.splitext(os.path.basename(output_tum))[0]
+            
+            if base_name.endswith("_estimation"):
+                gt_name = base_name.replace("_estimation", "_groundtruth") + ".tum"
+            elif base_name.endswith("estimation"):
+                gt_name = base_name.replace("estimation", "groundtruth") + ".tum"
+            else:
+                gt_name = base_name + "_groundtruth.tum"
                 
-            zip_output = os.path.splitext(output_tum)[0] + "_evo.zip"
-            # Use --align and --correct_scale for full Sim3 Umeyama alignment
-            evo_cmd = ["evo_ape", "tum", gt_file, output_tum, "--align", "--correct_scale", "--save_results", zip_output]
-            print(f"Executing evo: {' '.join(evo_cmd)}")
+            local_gt = os.path.join(out_dir, gt_name)
             try:
-                subprocess.run(evo_cmd, check=True)
-                print(f"Successfully generated evo zip file: {zip_output}")
-            except subprocess.CalledProcessError as e:
-                print(f"Evo execution failed: {e}")
-            except FileNotFoundError:
-                print("Evo executable not found. Make sure you have installed evo (e.g. pip install evo).")
+                shutil.copy2(gt_file, local_gt)
+                print(f"Copied ground truth to {local_gt}")
+            except Exception as e:
+                print(f"Failed to copy ground truth: {e}")
         else:
-            print(f"Warning: No groundtruth.tum found in {dataset_dir}, skipping evo_ape.")
+            print(f"Warning: No groundtruth.tum found in {dataset_dir}, skipping ground truth copy.")
             
     except subprocess.CalledProcessError as e:
         print(f"ORB-SLAM3 execution failed: {e}")

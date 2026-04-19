@@ -3,6 +3,7 @@ import os
 import subprocess
 import glob
 import shutil
+import datetime
 
 def run_oxford(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
     """
@@ -50,6 +51,23 @@ def run_oxford(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
     ]
     
     print(f"Executing: {' '.join(cmd)}")
+    
+    import sys
+    # Generate the report text
+    report_file = os.path.splitext(output_tum)[0] + "_report.txt"
+    os.makedirs(os.path.dirname(output_tum), exist_ok=True)
+    with open(report_file, "w") as rf:
+        rf.write("=== ORB-SLAM3 Oxford Run Report ===\n")
+        rf.write(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        rf.write(f"Dataset Directory: {dataset_dir}\n")
+        rf.write(f"Settings YAML: {settings_yaml}\n")
+        rf.write(f"ORB Binary: {orb_binary}\n")
+        rf.write(f"Vocab File: {vocab_file}\n")
+        rf.write(f"Python Command: {' '.join(sys.argv)}\n")
+        rf.write(f"Executed Command: {' '.join(cmd)}\n")
+        rf.write("===================================\n")
+    print(f"Generated run report: {report_file}")
+    
     try:
         # We use subprocess.run, it will output CameraTrajectory.txt or KeyFrameTrajectory.txt in CWD
         subprocess.run(cmd, check=True)
@@ -70,36 +88,33 @@ def run_oxford(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
             print("Warning: ORB-SLAM3 finished but no trajectory file was found in CWD.")
             return
             
-        # Attempt to run evo_ape and evo_rpe if groundtruth exists
+        if os.path.getsize(output_tum) == 0:
+            print(f"Warning: The generated trajectory file ({output_tum}) is empty!")
+            return
+
+        # Copy ground truth file if it exists
         experiment_root = os.path.dirname(os.path.dirname(dataset_dir))
         gt_files = glob.glob(os.path.join(experiment_root, "gps", "*_groundtruth.tum"))
         if gt_files:
             gt_file = gt_files[0]
-            if os.path.getsize(output_tum) == 0:
-                print(f"Warning: The generated trajectory file ({output_tum}) is empty!")
-                return
-                
             out_dir = os.path.dirname(output_tum)
-            ape_zip = os.path.join(out_dir, "ape_results.zip")
-            rpe_zip = os.path.join(out_dir, "rpe_results.zip")
+            base_name = os.path.splitext(os.path.basename(output_tum))[0]
             
-            evo_ape_cmd = ["evo_ape", "tum", gt_file, output_tum, "--align", "--correct_scale", "--save_results", ape_zip]
-            evo_rpe_cmd = ["evo_rpe", "tum", gt_file, output_tum, "--align", "--correct_scale", "--save_results", rpe_zip]
-            
-            print(f"Executing APE: {' '.join(evo_ape_cmd)}")
-            try:
-                subprocess.run(evo_ape_cmd, check=True)
-                print(f"Successfully generated APE zip file: {ape_zip}")
+            if base_name.endswith("_estimation"):
+                gt_name = base_name.replace("_estimation", "_groundtruth") + ".tum"
+            elif base_name.endswith("estimation"):
+                gt_name = base_name.replace("estimation", "groundtruth") + ".tum"
+            else:
+                gt_name = base_name + "_groundtruth.tum"
                 
-                print(f"Executing RPE: {' '.join(evo_rpe_cmd)}")
-                subprocess.run(evo_rpe_cmd, check=True)
-                print(f"Successfully generated RPE zip file: {rpe_zip}")
-            except subprocess.CalledProcessError as e:
-                print(f"Evo execution failed: {e}")
-            except FileNotFoundError:
-                print("Evo executable not found. Ensure evo is installed (e.g. pip install evo).")
+            local_gt = os.path.join(out_dir, gt_name)
+            try:
+                shutil.copy2(gt_file, local_gt)
+                print(f"Copied ground truth to {local_gt}")
+            except Exception as e:
+                print(f"Failed to copy ground truth: {e}")
         else:
-            print("Warning: No groundtruth.tum found in gps/, skipping evo.")
+            print("Warning: No groundtruth.tum found in gps/, skipping ground truth copy.")
 
     except subprocess.CalledProcessError as e:
         print(f"ORB-SLAM3 execution failed: {e}")
