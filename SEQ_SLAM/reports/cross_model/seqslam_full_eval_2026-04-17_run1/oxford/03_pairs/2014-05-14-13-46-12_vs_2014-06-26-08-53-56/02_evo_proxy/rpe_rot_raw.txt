@@ -1,0 +1,13 @@
+RPE w.r.t. rotation angle in degrees (deg)
+for delta = 1 (frames) using consecutive pairs
+(not aligned)
+
+       max	11.523298
+      mean	0.643711
+    median	0.018174
+       min	0.000002
+      rmse	1.823588
+       sse	9939.836813
+       std	1.706197
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/seqslam_full_eval_2026-04-17_run1/oxford/03_pairs/2014-05-14-13-46-12_vs_2014-06-26-08-53-56/02_evo_proxy/rpe_rot_raw.pdf

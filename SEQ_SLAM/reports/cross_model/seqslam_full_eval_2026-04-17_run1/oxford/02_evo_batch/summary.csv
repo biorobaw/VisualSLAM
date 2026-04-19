@@ -1,0 +1,4 @@
+pair_id,mode,status,exported_poses,output_root,message
+2014-05-14-13-46-12_vs_2014-05-14-13-46-12,proxy,ok,2919,/Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/seqslam_full_eval_2026-04-17_run1/oxford/03_pairs/2014-05-14-13-46-12_vs_2014-05-14-13-46-12/02_evo_proxy,evo completed
+2014-05-14-13-46-12_vs_2014-06-23-15-36-04,proxy,ok,3388,/Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/seqslam_full_eval_2026-04-17_run1/oxford/03_pairs/2014-05-14-13-46-12_vs_2014-06-23-15-36-04/02_evo_proxy,evo completed
+2014-05-14-13-46-12_vs_2014-06-26-08-53-56,proxy,ok,2990,/Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/seqslam_full_eval_2026-04-17_run1/oxford/03_pairs/2014-05-14-13-46-12_vs_2014-06-26-08-53-56/02_evo_proxy,evo completed

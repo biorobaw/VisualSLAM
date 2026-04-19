@@ -13,6 +13,7 @@ import argparse
 import csv
 import glob
 import os
+import re
 import time
 from copy import deepcopy
 
@@ -49,6 +50,10 @@ def _parse_velocity_ranges(value):
             raise ValueError(f"Invalid range '{token}': vmin > vmax")
         ranges.append((vmin, vmax))
     return ranges
+
+
+def _sanitize_tag(value):
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())
 
 
 def _load_timestamps(image_path):
@@ -212,12 +217,19 @@ def _plot_matches(matches, threshold, save_path, title, n_ref=None):
     plt.close()
 
 
-def _prepare_params(reference_run, query_run, use_cache=True, query_stride=1, auto_query_stride=False):
+def _prepare_params(
+    reference_run,
+    query_run,
+    image_subdir="stereo/centre",
+    use_cache=True,
+    query_stride=1,
+    auto_query_stride=False,
+):
     params = defaultParameters()
     params.DO_RESIZE = 1
 
-    reference_path = f"../datasets/oxford/{reference_run}/mono_left"
-    query_path = f"../datasets/oxford/{query_run}/mono_left"
+    reference_path = f"../datasets/oxford/{reference_run}/{image_subdir}"
+    query_path = f"../datasets/oxford/{query_run}/{image_subdir}"
 
     ref_images, ref_timestamps = _load_timestamps(reference_path)
     qry_images, qry_timestamps = _load_timestamps(query_path)
@@ -287,12 +299,14 @@ def _run_tuning(args):
     ) = _prepare_params(
         args.reference_run,
         args.query_run,
+        image_subdir=args.image_subdir,
         use_cache=not args.no_cache,
         query_stride=args.query_stride,
         auto_query_stride=args.auto_query_stride,
     )
 
-    result_dir = f"results/oxford/Oxford_{args.reference_run}_vs_{args.query_run}"
+    result_suffix = f"_{_sanitize_tag(args.result_tag)}" if args.result_tag else ""
+    result_dir = f"results/oxford/Oxford_{args.reference_run}_vs_{args.query_run}{result_suffix}"
     os.makedirs(result_dir, exist_ok=True)
 
     print("=" * 72)
@@ -300,6 +314,7 @@ def _run_tuning(args):
     print("=" * 72)
     print(f"Reference path: {reference_path}")
     print(f"Query path:     {query_path}")
+    print(f"Image subdir:   {args.image_subdir}")
     print(f"Reference frames found: {n_ref_images}")
     print(f"Query frames found (raw):  {n_qry_images_raw}")
     print(f"Query frames used (stride={effective_query_stride}): {n_qry_images_used}")
@@ -504,6 +519,16 @@ def main():
     parser = argparse.ArgumentParser(description="Auto-tune SeqSLAM Oxford matching parameters")
     parser.add_argument("--reference-run", default="2014-05-14-13-46-12")
     parser.add_argument("--query-run", default="2014-05-14-13-50-20")
+    parser.add_argument(
+        "--image-subdir",
+        default="stereo/centre",
+        help="Image subdirectory within each Oxford run.",
+    )
+    parser.add_argument(
+        "--result-tag",
+        default="",
+        help="Optional suffix appended to the per-pair Oxford result directory.",
+    )
     parser.add_argument("--ds-values", default="10,20,30,50")
     parser.add_argument("--rwindow-values", default="10,30,50")
     parser.add_argument("--velocity-ranges", default="0.8-1.2,0.5-1.5,0.3-2.0")

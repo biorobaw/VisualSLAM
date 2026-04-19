@@ -125,10 +125,10 @@ def _end_tangent(points):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Collect village sequence dataset.")
-    parser.add_argument("--run-name", default="village_day_centerline", help="Output run folder name.")
+    parser.add_argument("--run-name", default="village_summer", help="Output run folder name.")
     parser.add_argument(
         "--dataset-root",
-        default="SEQ_SLAM/datasets/village_sim",
+        default="SEQ_SLAM/datasets/village",
         help="Dataset root relative to repository root.",
     )
     parser.add_argument("--spacing-m", type=float, default=2.0, help="Meters between teleported samples.")

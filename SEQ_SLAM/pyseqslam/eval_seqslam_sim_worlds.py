@@ -13,6 +13,7 @@ import csv
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -49,6 +50,7 @@ class SummaryRow:
     dataset_group: str
     reference_run: str
     query_run: str
+    camera_subdir: str
     protocol: str
     best_ds: int
     best_vmin: float
@@ -91,10 +93,20 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Append/update cross_model_sanity_results.csv and cross_model_benchmark_results.csv",
     )
+    parser.add_argument(
+        "--camera-subdir-default",
+        default="mono_front",
+        help="Fallback camera subdirectory when older summary CSVs do not include camera_subdir.",
+    )
+    parser.add_argument(
+        "--pilot-subdir",
+        default="pilot/seq_slam",
+        help="Subdirectory under reports/cross_model where per-pair TUM/evo artifacts are written.",
+    )
     return parser.parse_args()
 
 
-def load_summary_rows(path: Path) -> list[SummaryRow]:
+def load_summary_rows(path: Path, default_camera_subdir: str) -> list[SummaryRow]:
     rows: list[SummaryRow] = []
     with path.open(newline="") as fp:
         reader = csv.DictReader(fp)
@@ -104,6 +116,7 @@ def load_summary_rows(path: Path) -> list[SummaryRow]:
                     dataset_group=row["dataset_group"],
                     reference_run=row["reference_run"],
                     query_run=row["query_run"],
+                    camera_subdir=(row.get("camera_subdir") or default_camera_subdir).strip(),
                     protocol=row["protocol"],
                     best_ds=int(row["best_ds"]),
                     best_vmin=float(row["best_vmin"]),
@@ -151,6 +164,7 @@ def run_best_matches(row: SummaryRow):
         row.dataset_group,
         row.reference_run,
         row.query_run,
+        camera_subdir=row.camera_subdir,
         use_cache=True,
         query_stride=1,
         auto_query_stride=True,
@@ -195,9 +209,9 @@ def write_tum_row(out, timestamp: float, pose: dict[str, float]) -> None:
     )
 
 
-def export_pair(row: SummaryRow) -> tuple[Path, Path, Path, int]:
+def export_pair(row: SummaryRow, pilot_root: Path) -> tuple[Path, Path, Path, int]:
     sequence_id = sequence_id_for(row)
-    pair_dir = CROSS_MODEL_DIR / "pilot" / MODEL_ID / sequence_id
+    pair_dir = pilot_root / sequence_id
     inputs_dir = pair_dir / "inputs"
     outputs_dir = pair_dir / "outputs"
     inputs_dir.mkdir(parents=True, exist_ok=True)
@@ -294,7 +308,25 @@ def headless_evo_env():
         (evo_dir / "settings.json").write_text(json.dumps(settings, indent=4))
         env = os.environ.copy()
         env["HOME"] = temp_home
+        python_bin_dir = str(Path(sys.executable).parent)
+        env["PATH"] = f"{python_bin_dir}:{env.get('PATH', '')}"
         yield env
+
+
+def resolve_evo_executable(name: str) -> str:
+    """Resolve evo CLI from active environment before falling back to PATH."""
+    candidate_dirs = [Path(sys.executable).parent, Path(sys.prefix) / "bin"]
+    for bin_dir in candidate_dirs:
+        candidate = bin_dir / name
+        if candidate.exists():
+            return str(candidate)
+    discovered = shutil.which(name)
+    if discovered:
+        return discovered
+    raise FileNotFoundError(
+        f"Required executable '{name}' was not found in {[str(d) for d in candidate_dirs]} or PATH. "
+        "Install evo in the active Python environment."
+    )
 
 
 def run_evo(command: list[str], txt_path: Path, env: dict[str, str]) -> float:
@@ -315,13 +347,15 @@ def run_evo(command: list[str], txt_path: Path, env: dict[str, str]) -> float:
     return parse_rmse(completed.stdout)
 
 
-def evaluate_pair(row: SummaryRow, gt_tum: Path, est_tum: Path) -> tuple[float, float, float]:
+def evaluate_pair(row: SummaryRow, gt_tum: Path, est_tum: Path, pilot_root: Path) -> tuple[float, float, float]:
     sequence_id = sequence_id_for(row)
-    outputs_dir = CROSS_MODEL_DIR / "pilot" / MODEL_ID / sequence_id / "outputs"
+    outputs_dir = pilot_root / sequence_id / "outputs"
+    evo_ape = resolve_evo_executable("evo_ape")
+    evo_rpe = resolve_evo_executable("evo_rpe")
     with headless_evo_env() as env:
         ape_rmse = run_evo(
             [
-                "evo_ape",
+                evo_ape,
                 "tum",
                 str(gt_tum),
                 str(est_tum),
@@ -342,7 +376,7 @@ def evaluate_pair(row: SummaryRow, gt_tum: Path, est_tum: Path) -> tuple[float, 
         )
         rpe_trans_rmse = run_evo(
             [
-                "evo_rpe",
+                evo_rpe,
                 "tum",
                 str(gt_tum),
                 str(est_tum),
@@ -363,7 +397,7 @@ def evaluate_pair(row: SummaryRow, gt_tum: Path, est_tum: Path) -> tuple[float, 
         )
         rpe_rot_rmse = run_evo(
             [
-                "evo_rpe",
+                evo_rpe,
                 "tum",
                 str(gt_tum),
                 str(est_tum),
@@ -441,6 +475,7 @@ def update_cross_model_csvs(artifacts: list[EvalArtifacts]) -> None:
 
 
 def write_report(report_path: Path, artifacts: list[EvalArtifacts], summary_csv: Path) -> None:
+    camera_paths = sorted({item.summary.camera_subdir for item in artifacts})
     lines = [
         "# SeqSLAM Sim-World Match Evaluation",
         "",
@@ -449,6 +484,7 @@ def write_report(report_path: Path, artifacts: list[EvalArtifacts], summary_csv:
         "## Scope",
         "",
         f"- Source tuning summary: `{summary_csv.relative_to(REPO_ROOT)}`",
+        f"- Camera subdirectory(s): `{', '.join(camera_paths)}`",
         "- For each pair, recompute the best-match sequence from SeqSLAM using the selected tuning row.",
         "- Export GT query poses and matched reference poses into synchronized TUM trajectories on valid matched frames only.",
         "- Run raw `evo` translation/rotation metrics without alignment because the simulator trajectories already share a coordinate frame.",
@@ -489,14 +525,15 @@ def write_report(report_path: Path, artifacts: list[EvalArtifacts], summary_csv:
 def main() -> None:
     args = parse_args()
     summary_csv = Path(args.summary_csv).resolve()
-    rows = load_summary_rows(summary_csv)
+    pilot_root = CROSS_MODEL_DIR / args.pilot_subdir
+    rows = load_summary_rows(summary_csv, args.camera_subdir_default)
     artifacts: list[EvalArtifacts] = []
 
     for row in rows:
-        gt_tum, est_tum, matches_csv, num_eval_poses = export_pair(row)
-        ape_rmse, rpe_trans_rmse, rpe_rot_rmse = evaluate_pair(row, gt_tum, est_tum)
+        gt_tum, est_tum, matches_csv, num_eval_poses = export_pair(row, pilot_root)
+        ape_rmse, rpe_trans_rmse, rpe_rot_rmse = evaluate_pair(row, gt_tum, est_tum, pilot_root)
         sequence_id = sequence_id_for(row)
-        pair_dir = CROSS_MODEL_DIR / "pilot" / MODEL_ID / sequence_id
+        pair_dir = pilot_root / sequence_id
         artifacts.append(
             EvalArtifacts(
                 summary=row,

@@ -1,0 +1,3 @@
+date,sequence_id,model_id,owner,protocol_label,eval_mode,trajectory_format,valid_input,ate_rmse,rpe_trans_rmse,rpe_rot_rmse,num_poses,alignment,sync_tolerance_sec,notes
+2026-04-17,city_summer_vs_city_summer,seq_slam,SEQ_SLAM lane,seqslam_match_export_seqslam_full_eval_2026-04-17_run1_sim_worlds,sanity_selfcheck,TUM,True,0.000000,0.000000,0.000000,354,raw_xy_no_alignment,NA,"SeqSLAM best params ds=10, v=(0.80,1.20), R=10, th=0.80; valid_ratio=0.9725, corr=1.0000"
+2026-04-17,village_summer_vs_village_summer,seq_slam,SEQ_SLAM lane,seqslam_match_export_seqslam_full_eval_2026-04-17_run1_sim_worlds,sanity_selfcheck,TUM,True,0.000000,0.000000,0.000000,1106,raw_xy_no_alignment,NA,"SeqSLAM best params ds=10, v=(0.80,1.20), R=10, th=0.90; valid_ratio=0.9910, corr=1.0000"

@@ -41,8 +41,8 @@ To collect a route dataset from the `city` / `city_night` worlds using teleport 
 3. Optionally set `controllerArgs`, for example:
 
 ```text
---dataset-root SEQ_SLAM/datasets/city_sim
---run-name city_sim_day_centerline
+--dataset-root SEQ_SLAM/datasets/city
+--run-name city_summer
 --spacing-m 1.99
 --laps 1
 --camera-mode both
@@ -70,8 +70,8 @@ rotation; this avoids the car body visible in direct side-camera captures.
 Open [city.wbt](worlds/city/city.wbt) and set the `BmwX5` controller to `city_dataset_collector`:
 
 ```text
---dataset-root SEQ_SLAM/datasets/city_sim
---run-name city_sim_day_centerline
+--dataset-root SEQ_SLAM/datasets/city
+--run-name city_summer
 --spacing-m 1.99
 --laps 1
 --camera-mode both
@@ -82,8 +82,8 @@ Open [city.wbt](worlds/city/city.wbt) and set the `BmwX5` controller to `city_da
 Open [city_night.wbt](worlds/city/city_night.wbt) and use:
 
 ```text
---dataset-root SEQ_SLAM/datasets/city_sim
---run-name city_sim_night_centerline
+--dataset-root SEQ_SLAM/datasets/city
+--run-name city_night
 --spacing-m 1.99
 --laps 1
 --camera-mode both
@@ -97,11 +97,11 @@ To collect the matching village route datasets, open [village.wbt](worlds/villag
 [village_winter.wbt](worlds/village/village_winter.wbt), select `village_vehicle`, and set the
 controller to `village_dataset_collector`.
 
-Village summer/day run:
+Village summer run:
 
 ```text
---dataset-root SEQ_SLAM/datasets/village_sim
---run-name village_sim_day_centerline_smooth
+--dataset-root SEQ_SLAM/datasets/village
+--run-name village_summer
 --spacing-m 1.5
 --yaw-lookahead-m 5.0
 --laps 1
@@ -113,8 +113,8 @@ Village summer/day run:
 Village winter run:
 
 ```text
---dataset-root SEQ_SLAM/datasets/village_sim
---run-name village_sim_winter_centerline_smooth
+--dataset-root SEQ_SLAM/datasets/village
+--run-name village_winter
 --spacing-m 1.5
 --yaw-lookahead-m 5.0
 --laps 1

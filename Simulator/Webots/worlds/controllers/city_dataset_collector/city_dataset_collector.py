@@ -95,10 +95,10 @@ def _build_outer_loop_centerline_xy(spacing_m):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Collect city sequence dataset.")
-    parser.add_argument("--run-name", default="city_day_outer_loop", help="Output run folder name.")
+    parser.add_argument("--run-name", default="city_summer", help="Output run folder name.")
     parser.add_argument(
         "--dataset-root",
-        default="SEQ_SLAM/datasets/oxford",
+        default="SEQ_SLAM/datasets/city",
         help="Dataset root relative to repository root.",
     )
     parser.add_argument("--spacing-m", type=float, default=3.0, help="Meters between teleported samples.")
