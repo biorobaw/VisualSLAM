@@ -1,0 +1,15 @@
+APE w.r.t. translation part (m)
+(not aligned)
+(projected to xy plane)
+
+       max	0.090727
+      mean	0.000155
+    median	0.000000
+       min	0.000000
+      rmse	0.003730
+       sse	0.040619
+       std	0.003727
+
+Plots saved to /Users/asadbeknematov/Desktop/Projects/VisualSLAM/SEQ_SLAM/reports/cross_model/seqslam_full_eval_2026-04-17_run1/oxford/03_pairs/2014-05-14-13-46-12_vs_2014-05-14-13-46-12/02_evo_proxy/ape_trans_xy_raw.pdf
+
+Matplotlib is building the font cache; this may take a moment.

@@ -1,0 +1,4 @@
+run_id,gt_tum
+2014-05-14-13-46-12,/absolute/path/to/2014-05-14-13-46-12_groundtruth.tum
+2014-06-23-15-36-04,/absolute/path/to/2014-06-23-15-36-04_groundtruth.tum
+2014-06-26-08-53-56,/absolute/path/to/2014-06-26-08-53-56_groundtruth.tum
