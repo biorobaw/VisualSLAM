@@ -34,7 +34,7 @@ def run_webots(dataset_dir, orb_binary, vocab_file, settings_yaml, output_tum):
                 # The filename is something like 0001.png
                 frame_str = os.path.splitext(filename)[0]
                 try:
-                    ts = float(int(frame_str))  # Using frame_id directly as timestamp
+                    ts = float(int(frame_str)) / 10.0  # Scale frame IDs to 10fps timestamps for ORB-SLAM3 motion model
                     rel_path = os.path.relpath(img, dataset_dir)
                     f.write(f"{ts:.6f} {rel_path}\n")
                 except ValueError:

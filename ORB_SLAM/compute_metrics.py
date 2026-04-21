@@ -3,7 +3,6 @@ import os
 import subprocess
 import glob
 import pandas as pd
-import re
 
 def parse_evo_output(output_text):
     """
@@ -40,7 +39,7 @@ def run_evo_command(cmd, est_file, metric_name):
         print(f"Error running {metric_name} on {est_file}:\n{e.stderr}")
         return None
 
-def compute_metrics(results_dir, gt_dir, output_csv):
+def compute_metrics(results_dir, output_csv):
     """
     Compute ATE and RPE for all trajectory pairs.
     """
@@ -90,27 +89,20 @@ def compute_metrics(results_dir, gt_dir, output_csv):
         rpe_rot_zip = os.path.join(out_dir, f"{base_name}_rpe_rot_results.zip")
         rpe_rot_plot = os.path.join(out_dir, f"{base_name}_rpe_rot_plot.png")
         traj_plot = os.path.join(out_dir, f"{base_name}_traj_xy_plot.png")
+        traj_gt_plot = os.path.join(out_dir, f"{base_name}_traj_xy_gt_only.png")
+        traj_est_plot = os.path.join(out_dir, f"{base_name}_traj_xy_est_only.png")
         
         # Define evo commands
-        common_flags = ["--align_origin", "-s", "--project_to_plane", "xy", "--no_warnings"]
+        common_flags = ["-as", "--no_warnings"]
         cmd_ape_trans = ["evo_ape", "tum", gt_file, est_file] + common_flags + ["-r", "trans_part", "--save_results", ape_trans_zip, "--save_plot", ape_trans_plot]
         cmd_rpe_trans = ["evo_rpe", "tum", gt_file, est_file] + common_flags + ["-r", "trans_part", "--save_results", rpe_trans_zip, "--save_plot", rpe_trans_plot]
         cmd_rpe_rot = ["evo_rpe", "tum", gt_file, est_file] + common_flags + ["-r", "angle_deg", "--save_results", rpe_rot_zip, "--save_plot", rpe_rot_plot]
-        
-        # Trajectory overlay plot (2D top-down XZ view)
-        cmd_traj = [
-            "evo_traj", "tum", gt_file, est_file,
-            "--align_origin", "-s", "--project_to_plane", "xy",
-            "--no_warnings",
-            "--plot_mode", "xz",
-            "--save_plot", traj_plot
-        ]
-        try:
-            subprocess.run(cmd_traj, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-            print(f"  Saved trajectory plot: {traj_plot}")
-        except subprocess.CalledProcessError as e:
-            print(f"  Warning: evo_traj plot failed for {est_file}:\n{e.stderr}")
-        
+        # Trajectory plots: combined, GT-only, and estimation-only top-down maps
+        traj_common = ["--no_warnings", "--plot_mode", "xy"]
+        cmd_traj = ["evo_traj", "tum", gt_file, est_file, "--align", "--correct_scale"] + traj_common + ["--save_plot", traj_plot]
+        cmd_traj_gt = ["evo_traj", "tum", gt_file] + traj_common + ["--save_plot", traj_gt_plot]
+        cmd_traj_est = ["evo_traj", "tum", est_file] + traj_common + ["--save_plot", traj_est_plot]
+                
         # ATE Translation
         ate_trans_metrics = run_evo_command(cmd_ape_trans, est_file, "APE Translation")
         # RPE Translation
@@ -118,6 +110,19 @@ def compute_metrics(results_dir, gt_dir, output_csv):
         # RPE Rotation
         rpe_rot_metrics = run_evo_command(cmd_rpe_rot, est_file, "RPE Rotation")
         
+
+        # Generate trajectory plots: combined, GT-only, and estimation-only
+        for label, cmd, plot_path in [
+            ("combined", cmd_traj, traj_plot),
+            ("GT-only", cmd_traj_gt, traj_gt_plot),
+            ("estimation-only", cmd_traj_est, traj_est_plot),
+        ]:
+            try:
+                subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+                print(f"  Saved {label} trajectory plot: {plot_path}")
+            except subprocess.CalledProcessError as e:
+                print(f"  Warning: evo_traj {label} plot failed for {est_file}:\n{e.stderr}")
+
         if ate_trans_metrics and rpe_trans_metrics and rpe_rot_metrics:
             row = {
                 "Sequence": sequence,
@@ -151,8 +156,7 @@ def compute_metrics(results_dir, gt_dir, output_csv):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Compute ATE and RPE metrics via evo.')
     parser.add_argument('--results_dir', default='VisualSLAM/ORB_SLAM/results', help='Directory with estimated trajectories')
-    parser.add_argument('--gt_dir', default='VisualSLAM/ORB_SLAM/results', help='Directory with ground truth trajectories')
     parser.add_argument('--output_csv', default='VisualSLAM/ORB_SLAM/results/metrics_summary.csv', help='Path to output CSV')
     
     args = parser.parse_args()
-    compute_metrics(args.results_dir, args.gt_dir, args.output_csv)
+    compute_metrics(args.results_dir, args.output_csv)

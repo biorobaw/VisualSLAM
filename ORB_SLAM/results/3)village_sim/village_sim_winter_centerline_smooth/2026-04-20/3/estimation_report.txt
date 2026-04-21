@@ -1,0 +1,9 @@
+=== ORB-SLAM3 Webots Run Report ===
+Timestamp: 2026-04-20 22:30:48
+Dataset Directory: VisualSLAM/Experiments/3)village_sim/village_sim_winter_centerline_smooth/mono_front
+Settings YAML: VisualSLAM/Experiments/3)village_sim/webots.yaml
+ORB Binary: VisualSLAM/ORB_SLAM/ORB_SLAM3/Examples/Monocular/mono_tum
+Vocab File: VisualSLAM/ORB_SLAM/ORB_SLAM3/Vocabulary/ORBvoc.txt
+Python Command: VisualSLAM/ORB_SLAM/run_webots.py --dataset_dir VisualSLAM/Experiments/3)village_sim/village_sim_winter_centerline_smooth/mono_front --orb_binary VisualSLAM/ORB_SLAM/ORB_SLAM3/Examples/Monocular/mono_tum --vocab_file VisualSLAM/ORB_SLAM/ORB_SLAM3/Vocabulary/ORBvoc.txt --settings_yaml VisualSLAM/Experiments/3)village_sim/webots.yaml --output_tum VisualSLAM/ORB_SLAM/results/3)village_sim/village_sim_winter_centerline_smooth/2026-04-20/3/estimation.tum
+Executed Command: VisualSLAM/ORB_SLAM/ORB_SLAM3/Examples/Monocular/mono_tum VisualSLAM/ORB_SLAM/ORB_SLAM3/Vocabulary/ORBvoc.txt VisualSLAM/Experiments/3)village_sim/webots.yaml VisualSLAM/Experiments/3)village_sim/village_sim_winter_centerline_smooth/mono_front
+===================================
