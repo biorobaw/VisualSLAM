@@ -1,0 +1,53 @@
+// ORB_SLAM3 Dev Container Configuration
+// Runs x86_64 Ubuntu 20.04 under Rosetta 2 on Apple Silicon
+{
+  "name": "ORB_SLAM3 (x86_64)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  // Mount the project workspace
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+
+  // Run as root inside the container (simplifies library access)
+  "remoteUser": "root",
+
+  // Environment variables available inside the container
+  "remoteEnv": {
+    "ORB_SLAM3_ROOT": "/opt/ORB_SLAM3",
+    "ORB_VOCAB": "/opt/ORB_SLAM3/Vocabulary/ORBvoc.txt"
+  },
+
+  // VS Code extensions to install inside the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "cmake.configureOnOpen": false
+      }
+    }
+  },
+
+  // Features to add
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": false
+    }
+  },
+
+  // No extra runArgs needed — the Dockerfile's FROM --platform=linux/amd64
+  // already ensures x86_64. Adding --platform here causes image lookup issues
+  // with Docker Desktop's containerd image store on Apple Silicon.
+  "runArgs": [],
+
+  // Post-create verification
+  "postCreateCommand": "echo '=== ORB_SLAM3 Dev Container Ready ===' && ls /opt/ORB_SLAM3/lib/libORB_SLAM3.so && echo 'Vocabulary:' && ls /opt/ORB_SLAM3/Vocabulary/ORBvoc.txt && python3 --version && echo 'evo version:' && evo_ape --version 2>/dev/null || echo 'evo installed'"
+}
