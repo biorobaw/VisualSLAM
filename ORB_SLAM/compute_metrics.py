@@ -3,7 +3,6 @@ import os
 import subprocess
 import glob
 import pandas as pd
-import re
 
 def parse_evo_output(output_text):
     """
@@ -40,7 +39,7 @@ def run_evo_command(cmd, est_file, metric_name):
         print(f"Error running {metric_name} on {est_file}:\n{e.stderr}")
         return None
 
-def compute_metrics(results_dir, gt_dir, output_csv):
+def compute_metrics(results_dir, output_csv):
     """
     Compute ATE and RPE for all trajectory pairs.
     """
@@ -92,25 +91,12 @@ def compute_metrics(results_dir, gt_dir, output_csv):
         traj_plot = os.path.join(out_dir, f"{base_name}_traj_xy_plot.png")
         
         # Define evo commands
-        common_flags = ["--align_origin", "-s", "--project_to_plane", "xy", "--no_warnings"]
+        common_flags = ["-as", "--project_to_plane", "xy", "--no_warnings"]
         cmd_ape_trans = ["evo_ape", "tum", gt_file, est_file] + common_flags + ["-r", "trans_part", "--save_results", ape_trans_zip, "--save_plot", ape_trans_plot]
         cmd_rpe_trans = ["evo_rpe", "tum", gt_file, est_file] + common_flags + ["-r", "trans_part", "--save_results", rpe_trans_zip, "--save_plot", rpe_trans_plot]
         cmd_rpe_rot = ["evo_rpe", "tum", gt_file, est_file] + common_flags + ["-r", "angle_deg", "--save_results", rpe_rot_zip, "--save_plot", rpe_rot_plot]
-        
-        # Trajectory overlay plot (2D top-down XZ view)
-        cmd_traj = [
-            "evo_traj", "tum", gt_file, est_file,
-            "--align_origin", "-s", "--project_to_plane", "xy",
-            "--no_warnings",
-            "--plot_mode", "xz",
-            "--save_plot", traj_plot
-        ]
-        try:
-            subprocess.run(cmd_traj, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-            print(f"  Saved trajectory plot: {traj_plot}")
-        except subprocess.CalledProcessError as e:
-            print(f"  Warning: evo_traj plot failed for {est_file}:\n{e.stderr}")
-        
+        cmd_traj = ["evo_traj", "tum", gt_file, est_file] + common_flags + ["--plot_mode xy", "--save_plot", traj_plot]
+                
         # ATE Translation
         ate_trans_metrics = run_evo_command(cmd_ape_trans, est_file, "APE Translation")
         # RPE Translation
@@ -118,6 +104,13 @@ def compute_metrics(results_dir, gt_dir, output_csv):
         # RPE Rotation
         rpe_rot_metrics = run_evo_command(cmd_rpe_rot, est_file, "RPE Rotation")
         
+
+        try:
+            subprocess.run(cmd_traj, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+            print(f"  Saved trajectory plot: {traj_plot}")
+        except subprocess.CalledProcessError as e:
+            print(f"  Warning: evo_traj plot failed for {est_file}:\n{e.stderr}")
+
         if ate_trans_metrics and rpe_trans_metrics and rpe_rot_metrics:
             row = {
                 "Sequence": sequence,
