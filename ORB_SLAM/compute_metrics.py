@@ -156,7 +156,8 @@ def compute_metrics(results_dir, output_csv):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Compute ATE and RPE metrics via evo.')
     parser.add_argument('--results_dir', default='VisualSLAM/ORB_SLAM/results', help='Directory with estimated trajectories')
-    parser.add_argument('--output_csv', default='VisualSLAM/ORB_SLAM/results/metrics_summary.csv', help='Path to output CSV')
+    parser.add_argument('--output_csv', default=None, help='Path to output CSV (defaults to results_dir/metrics_summary.csv)')
     
     args = parser.parse_args()
-    compute_metrics(args.results_dir, args.output_csv)
+    output_csv = args.output_csv if args.output_csv else os.path.join(args.results_dir, 'metrics_summary.csv')
+    compute_metrics(args.results_dir, output_csv)

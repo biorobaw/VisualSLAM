@@ -7,9 +7,9 @@
     "context": ".."
   },
 
-  // Mount the project workspace
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-  "workspaceFolder": "/workspace",
+  // Mount the VisualSLAM/ parent so both ORB_SLAM/ and Experiments/ are accessible
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace/ORB_SLAM",
 
   // Run as root inside the container (simplifies library access)
   "remoteUser": "root",

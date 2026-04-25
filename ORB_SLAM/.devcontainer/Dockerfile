@@ -69,6 +69,9 @@ RUN git clone --depth 1 https://github.com/UZ-SLAMLab/ORB_SLAM3.git && \
     sed -i 's/find_package(OpenCV 4.4)/find_package(OpenCV 4.2)/' CMakeLists.txt && \
     # Upgrade C++ standard to C++14 (required by Pangolin v0.8's sigslot headers)
     sed -i 's/c++11/c++14/g; s/c++0x/c++14/g' CMakeLists.txt && \
+    # Disable Pangolin viewer in all example binaries (headless container has no display)
+    find Examples Examples_old -name '*.cc' -exec \
+      sed -i -E 's/(ORB_SLAM3::System\s+SLAM\([^,]+,[^,]+,[^,]+,)\s*true/\1 false/g' {} + && \
     chmod +x build.sh && \
     ./build.sh
 
