@@ -1,0 +1,9 @@
+=== ORB-SLAM3 Oxford Run Report ===
+Timestamp: 2026-04-21 17:10:32
+Dataset Directory: /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/stereo/centre
+Settings YAML: /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/ORC.yaml
+ORB Binary: /opt/ORB_SLAM3/Examples/Monocular/mono_tum
+Vocab File: /opt/ORB_SLAM3/Vocabulary/ORBvoc.txt
+Python Command: /workspace/ORB_SLAM/run_oxford.py --dataset_dir /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/stereo/centre --orb_binary /opt/ORB_SLAM3/Examples/Monocular/mono_tum --vocab_file /opt/ORB_SLAM3/Vocabulary/ORBvoc.txt --settings_yaml /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/ORC.yaml --output_tum /workspace/ORB_SLAM/results/1)ORC-sun-2014-05-14-13-46-12/2026-04-21/1/estimation.tum
+Executed Command: /opt/ORB_SLAM3/Examples/Monocular/mono_tum /opt/ORB_SLAM3/Vocabulary/ORBvoc.txt /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/ORC.yaml /workspace/Experiments/1)ORC-sun-2014-05-14-13-46-12/stereo/centre
+===================================

@@ -1,0 +1,2 @@
+Sequence,Modality,ATE_Trans_RMSE,ATE_Trans_Mean,ATE_Trans_Median,ATE_Trans_Min,ATE_Trans_Max,RPE_Trans_RMSE,RPE_Trans_Mean,RPE_Trans_Median,RPE_Trans_Min,RPE_Trans_Max,RPE_Rot_RMSE,RPE_Rot_Mean,RPE_Rot_Median,RPE_Rot_Min,RPE_Rot_Max
+village_sim_day_centerline_smooth,mono,0.30255,0.2853,0.276003,0.166879,0.413018,2.613337,2.544966,2.544966,1.951102,3.138831,13.139685,13.099572,13.099572,12.073632,14.125512
